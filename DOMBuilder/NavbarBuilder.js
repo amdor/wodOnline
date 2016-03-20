@@ -28,7 +28,7 @@ function createNavbar () {
     var brandElement = document.createElement("A");
     brandElement.className = "navbar-brand";
     brandElement.href = "home.html";
-    brandElement.innerHTML = "AutoComparator";
+    brandElement.innerHTML = "WoD";
     
     var navListContainer = document.createElement("DIV");
     navListContainer.className = "collapse navbar-collapse";
@@ -37,32 +37,24 @@ function createNavbar () {
     var navList = document.createElement("UL");
     navList.className = "nav navbar-nav";
     
-    var homepageListElement = document.createElement("LI");
-    homepageListElement.className = "active";
+    var playListElement = document.createElement("LI");
+    playListElement.className = "active";
     
-    var homepageAnchor = document.createElement("A");
-    homepageAnchor.href = "home.html";
-    homepageAnchor.innerHTML = "Autók";
+    var playAnchor = document.createElement("A");
+    playAnchor.href = "#";//todo
+    playAnchor.innerHTML = "Play";
     
-    var resultListListElement = document.createElement("LI");
+    var loadListElement = document.createElement("LI");
     
-    var resultListAnchor = document.createElement("A");
-    resultListAnchor.href = "#";
-    resultListAnchor.innerHTML = "Találati lista";
-    
-    var advancedSearchListElement = document.createElement("LI");
-    
-    var advancedSearchAnchor = document.createElement("A");
-    advancedSearchAnchor.href = "#";
-    advancedSearchAnchor.innerHTML = "Bővebb keresés";
+    var loadListAnchor = document.createElement("A");
+    loadListAnchor.href = "#";//todo
+    loadListAnchor.innerHTML = "Load";
     
     //Making the containment
-    advancedSearchListElement.appendChild(advancedSearchAnchor);
-    resultListListElement.appendChild(resultListAnchor);
-    homepageListElement.appendChild(homepageAnchor);
-    navList.appendChild(homepageListElement);
-    navList.appendChild(resultListListElement);
-    navList.appendChild(advancedSearchListElement);
+    loadListElement.appendChild(loadListAnchor);
+    playListElement.appendChild(playAnchor);
+    navList.appendChild(playListElement);
+    navList.appendChild(loadListElement);
     navListContainer.appendChild(navList);
     
     collapseButton.appendChild(iconSpan);
