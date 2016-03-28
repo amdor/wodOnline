@@ -18,6 +18,15 @@ function getStoryText( $episode, $manager) {
     return json_encode( $documentArray[0] );
 }
 
+function getNPC( $enemy, $manager ) {
+    logToFile("getNPC started with npc $enemy");
+    $query = new MongoDB\Driver\Query( array('Name' => $enemy ) );
+    $cursor = $manager ->executeQuery('heroku_6czfjjnr.NPC', $query);
+    $documentArray = $cursor -> toArray();
+    logToFile( "Enemy " + $documentArray[0]);
+    return json_encode( $documentArray[0] );
+}
+
 
 /////////////
 /////MAIN///
@@ -35,6 +44,8 @@ try{
     } elseif( checkEpisode($_GET["story"]) ) {
         logToFile("Getting story");
         echo getStoryText( $_GET["story"], $manager);
+    } elseif( checkEnemy( $_GET["npc"] ) ) {
+        echo getNPC( $_GET["npc"], $manager );
     }
 }
 catch(Exception $e) {
@@ -53,6 +64,7 @@ function logToFile( $log ) {
 function checkEpisode($episode) {
     logToFile("Check episode start $episode");
     if( empty($episode) ) {
+        logToFile( "Episode is empty" );
         return false;
     } elseif ( 100 < intval($episode) || 0 > intval($episode) ) {
         http_response_code( 400 );
@@ -66,8 +78,19 @@ function whiteListAnswerLetter($answerLetter) {
     if( preg_match("/^[A-D]/", $answerLetter) ) {
         return substr($answerLetter, 0, 1);
     } else {
-        http_response_code( 500 );
+        http_response_code( 400 );
         return false;
     }
 }
+
+function checkEnemy( $enemy ) {
+    logToFile( "checkEnemy start" );
+    if( preg_match("/^\w{1,15}/", $enemy) ) {
+        return true;
+    } else {
+        http_response_code( 400 );
+        return false;
+    }
+}
+
 ?>

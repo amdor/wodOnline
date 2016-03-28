@@ -3,7 +3,11 @@
  */
 
 //Static vars (used by other js too)
-var episode           //TODO load from cookie
+var episode;           //TODO load from cookie
+var character;          //TODO load from cookie
+var contentDiv;
+var titleHead;
+var characterStatDiv;
 
 /**
  * addEvent function for crossplatform add event capability
@@ -37,13 +41,7 @@ function removeEvent(elem, type, handler) {
  * Saves important user data to sessionStorage before leaving the page
  */
 function beforeWindowUnload(event) {
-   sessionStorage.inputUriCount = currentInputUriCount;
-   var uriArray = new Array();
-   for(var i = 0; i < currentInputUriCount; i++) {
-      var textFieldHolder = document.getElementById(uriInputFieldIdPrefix + i);
-      uriArray.push( (textFieldHolder && textFieldHolder.value) ? textFieldHolder.value : "" );
-   }
-   sessionStorage.inputUriTextContent = JSON.stringify(uriArray);
+//TODO
 }
 /**
  * Initialize page's dynamic contents
@@ -52,8 +50,22 @@ function windowLoaded(event) {
    //Make navbar
    document.body.insertBefore( createNavbar(), document.body.firstChild );
    
+   titleHead = document.createElement("h3");
+   titleHead.id = "title_Div";
+   contentDiv = document.createElement("DIV");
+   contentDiv.id = "content_Div";
+   var storyContainer = document.getElementById("story_container");
+   storyContainer.style.cursor = "default";
+   storyContainer.insertBefore(contentDiv, storyContainer.firstChild);
+   storyContainer.insertBefore(titleHead, contentDiv);
+   
    episode = 1;
    loadStory(episode);
+   
+   character = new Character();
+
+   characterStatDiv = document.getElementById( "character_stat" );
+   character.refreshDiv( characterStatDiv );
    
    addEvent(document.getElementById("answer_row"), "click", answerClicked);
 }
@@ -69,7 +81,17 @@ function answerClicked(event) {
     }  else if (event.target.id === "answerD") {
         getAnswer( episode, "C" );
     }
+   addEvent( contentDiv.parentNode, "click", nextStoryLoad );
+   removeEvent(document.getElementById("answer_row"), "click", answerClicked);
     
+}
+
+
+function nextStoryLoad() {
+   loadStory( episode );
+   character.refreshDiv( characterStatDiv );
+   removeEvent( contentDiv.parentNode, "click", nextStoryLoad );
+   addEvent(document.getElementById("answer_row"), "click", answerClicked);
 }
 
 function loadStory( ep ) {
@@ -77,18 +99,11 @@ function loadStory( ep ) {
    xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
          var response = JSON.parse( xhttp.responseText );
-         var titleHead = document.createElement("h3");
-         titleHead.id = "title_Div";
          titleHead.textContent = response.Title;
-         var contentDiv = document.createElement("DIV");
-         contentDiv.id = "content_Div";
          contentDiv.textContent = response.Content;
          for(var i = 0; i < response.Answers.length; i++) {
             contentDiv.textContent += '\r\n'+response.Answers[i].text;
          }
-         var storyContainer = document.getElementById("story_container");
-         storyContainer.insertBefore(contentDiv, storyContainer.firstChild);
-         storyContainer.insertBefore(titleHead, contentDiv);
       } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
          showRequestAlert();
       }
@@ -105,7 +120,7 @@ function getAnswer( ep, answer ) {
    var xhttp = new XMLHttpRequest();
    xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
-         document.getElementById("output_container").innerHTML = xhttp.responseText;
+         handleAnswerResponse( xhttp.responseText );
       } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
          showRequestAlert();
       }
@@ -120,8 +135,37 @@ function showRequestAlert() {
    notificationAlert.role = "alert";
    notificationAlert.id = "request_Alert";
    notificationAlert.innerHTML = "Request resulted in error";
-   document.getElementById("output_container").appendChild(notificationAlert);
+   contentDiv.parentNode.appendChild(notificationAlert);
    $("#request_Alert").delay(4000).fadeOut(800, function() {
       $(this).alert('close');
    });
+}
+
+function handleAnswerResponse( answerResponse ) {
+   var xpGain = 0;
+   if ( answerResponse === "fail" ) {
+      xpGain = character.fail();
+      episode++;
+      contentDiv.textContent = "Hasn't saved the world today. \n Gained " + 
+                     xpGain + " experience";
+    } else if ( answerResponse === "reward" ) {
+      xpGain = character.reward();
+      episode++;
+      contentDiv.textContent = "The well-deserved reward is " +  
+                     xpGain + " experience";
+    } else {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+         if (xhttp.readyState == 4 && xhttp.status == 200) {
+            var npc = JSON.parse( xhttp.responseText );
+            character.fight( npc );
+            episode++;
+         } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
+            showRequestAlert();
+         }
+      };
+      xhttp.open("GET", "proxy.php?npc=" + answerResponse, true);
+      xhttp.send();     
+
+    }
 }
