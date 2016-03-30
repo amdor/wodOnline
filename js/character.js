@@ -3,11 +3,13 @@
  *
  * Controls game dynamics
  */
+var maxHP;
 
 function Character() {
     this.attackPower = 10;
     this.defensePower = 8;
     this.healthPoint = 150;
+    maxHP = this.healthPoint;
     this.experience = 0;
     this.level = 1;
     this.fail = fail;
@@ -21,7 +23,8 @@ function Character() {
 function levelUp() {
     this.attackPower += 2;
 	this.defensePower += 1;
-	this.healthPoint += 20;
+	maxHP += 20;
+    this.healthPoint = maxHP;
 	this.experience = 0;
 	this.level++;
 }
@@ -88,7 +91,8 @@ function fight( actEnemy ) {
         //player died
         if(this.healthPoint <= 0){
             contentDiv.textContent += "Rhonin died, the game is lost\n";
-            Character();
+            character = new Character();
+            episode = 1;
         //player survived
         }else{
             

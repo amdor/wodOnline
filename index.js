@@ -89,6 +89,7 @@ function answerClicked(event) {
 
 function nextStoryLoad() {
    loadStory( episode );
+   character.healthPoint = (character.healthPoint <= maxHP - 20) ? character.healthPoint + 20 : maxHP;
    character.refreshDiv( characterStatDiv );
    removeEvent( contentDiv.parentNode, "click", nextStoryLoad );
    addEvent(document.getElementById("answer_row"), "click", answerClicked);
@@ -157,9 +158,9 @@ function handleAnswerResponse( answerResponse ) {
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
          if (xhttp.readyState == 4 && xhttp.status == 200) {
+            episode++;
             var npc = JSON.parse( xhttp.responseText );
             character.fight( npc );
-            episode++;
          } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
             showRequestAlert();
          }
