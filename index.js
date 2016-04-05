@@ -3,8 +3,8 @@
  */
 
 //Static vars (used by other js too)
-var episode;           //TODO load from cookie
-var character;          //TODO load from cookie
+var episode;
+var character;
 var contentDiv;
 var titleHead;
 var characterStatDiv;
@@ -41,7 +41,10 @@ function removeEvent(elem, type, handler) {
  * Saves important user data to sessionStorage before leaving the page
  */
 function beforeWindowUnload(event) {
-//TODO
+   if( typeof(Storage) !== "undefined" ) {
+      sessionStorage.episode = episode;
+      saveCharacter(localStorage, character);
+   }
 }
 /**
  * Initialize page's dynamic contents
@@ -59,11 +62,11 @@ function windowLoaded(event) {
    storyContainer.insertBefore(contentDiv, storyContainer.firstChild);
    storyContainer.insertBefore(titleHead, contentDiv);
    
-   episode = 1;
+   episode = (typeof(Storage) !== "undefined") ? ((sessionStorage.episode !== "undefined") ? sessionStorage.episode : 1) : 1;
    loadStory(episode);
    
-   character = new Character();
-
+   character =  (typeof(Storage) !== "undefined") ? (sessionStorage.character !== "undefined") ? loadCharacter(sessionStorage) : new Character() : new Character();
+   
    characterStatDiv = document.getElementById( "character_stat" );
    character.refreshDiv( characterStatDiv );
    
@@ -71,18 +74,17 @@ function windowLoaded(event) {
 }
 
 function answerClicked(event) {
-    var answer = "";
-    if (event.target.id === "answerA") {
-        getAnswer( episode, "A" );
-    } else if (event.target.id === "answerB") {
-        getAnswer( episode, "B" );
-    }  else if (event.target.id === "answerC") {
-        getAnswer( episode, "C" );
-    }  else if (event.target.id === "answerD") {
-        getAnswer( episode, "C" );
-    }
-   addEvent( contentDiv.parentNode, "click", nextStoryLoad );
-   removeEvent(document.getElementById("answer_row"), "click", answerClicked);
+   var answer = "";
+   if (event.target.id === "answerA") {
+      getAnswer( episode, "A" );
+   } else if (event.target.id === "answerB") {
+      getAnswer( episode, "B" );
+   }  else if (event.target.id === "answerC") {
+      getAnswer( episode, "C" );
+   }  else if (event.target.id === "answerD") {
+      getAnswer( episode, "C" );
+   }
+   indexAnsweredState();
     
 }
 
@@ -90,9 +92,37 @@ function answerClicked(event) {
 function nextStoryLoad() {
    loadStory( episode );
    character.healthPoint = (character.healthPoint <= maxHP - 20) ? character.healthPoint + 20 : maxHP;
+   indexStoryState();
+}
+
+///////////////////
+///STATE CHANGE///
+/////////////////
+function indexStoryState() {
    character.refreshDiv( characterStatDiv );
    removeEvent( contentDiv.parentNode, "click", nextStoryLoad );
    addEvent(document.getElementById("answer_row"), "click", answerClicked);
+   removeAnswerButtonsAttribute("disabled");
+}
+
+function indexAnsweredState() {
+   addEvent( contentDiv.parentNode, "click", nextStoryLoad );
+   removeEvent(document.getElementById("answer_row"), "click", answerClicked);
+   setAnswerButtonsAttribute("disabled", "disabled");
+}
+
+function setAnswerButtonsAttribute(name, value) {
+   document.getElementById("answerA").setAttribute(name, value);
+   document.getElementById("answerB").setAttribute(name, value);
+   document.getElementById("answerC").setAttribute(name, value);
+   document.getElementById("answerD").setAttribute(name, value);
+}
+
+function removeAnswerButtonsAttribute(name) {
+   document.getElementById("answerA").removeAttribute(name);
+   document.getElementById("answerB").removeAttribute(name);
+   document.getElementById("answerC").removeAttribute(name);
+   document.getElementById("answerD").removeAttribute(name);
 }
 
 function loadStory( ep ) {
@@ -106,7 +136,7 @@ function loadStory( ep ) {
             contentDiv.textContent += '\r\n'+response.Answers[i].text;
          }
       } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
-         showRequestAlert();
+         showAlert("Request resulted in error");
       }
    };
    xhttp.open("GET", "proxy.php?story=" + ep, true);
@@ -123,23 +153,11 @@ function getAnswer( ep, answer ) {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
          handleAnswerResponse( xhttp.responseText );
       } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
-         showRequestAlert();
+         showAlert("Request resulted in error");
       }
    };
    xhttp.open("GET", "proxy.php?answer=" + ep + "&answerLetter=" + answer, true);
    xhttp.send();
-}
-
-function showRequestAlert() {
-   var notificationAlert = document.createElement("DIV");
-   notificationAlert.className = "col-md-10 alert alert-danger fade in";
-   notificationAlert.role = "alert";
-   notificationAlert.id = "request_Alert";
-   notificationAlert.innerHTML = "Request resulted in error";
-   contentDiv.parentNode.appendChild(notificationAlert);
-   $("#request_Alert").delay(4000).fadeOut(800, function() {
-      $(this).alert('close');
-   });
 }
 
 function handleAnswerResponse( answerResponse ) {
@@ -162,11 +180,35 @@ function handleAnswerResponse( answerResponse ) {
             var npc = JSON.parse( xhttp.responseText );
             character.fight( npc );
          } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
-            showRequestAlert();
+            showAlert("Request resulted in error");
          }
       };
       xhttp.open("GET", "proxy.php?npc=" + answerResponse, true);
       xhttp.send();     
 
     }
+}
+
+function showAlert( msg ) {
+   var notificationAlert = document.createElement("DIV");
+   notificationAlert.className = "col-md-10 alert alert-danger fade in";
+   notificationAlert.role = "alert";
+   notificationAlert.id = "temp_Alert";
+   notificationAlert.innerHTML = msg;
+   contentDiv.parentNode.appendChild(notificationAlert);
+   $("#temp_Alert").delay(4000).fadeOut(800, function() {
+      $(this).alert('close');
+   });
+}
+
+function showInfo( msg ) {
+    var infoAlert = document.createElement("DIV");
+    infoAlert.className = "col-md-10 alert alert-info fade in";
+    infoAlert.role = "alert";
+    infoAlert.id = "temp_Info";
+    var storyContainer = $("#story_container");
+    storyContainer.insertBefore(storyContainer.firstChild, infoAlert);
+    $("#temp_Info").delay(4000).fadeOut(800, function(){
+         $(this).alert('close');
+    });
 }

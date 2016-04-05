@@ -8,16 +8,11 @@ var maxHP;
 function Character() {
     this.attackPower = 10;
     this.defensePower = 8;
-    this.healthPoint = 150;
+    this.healthPoint = 120;
     maxHP = this.healthPoint;
     this.experience = 0;
     this.level = 1;
-    this.fail = fail;
-    this.reward = reward;
-    this.fight = fight;
-    this.xpToLevelUp = xpToLevelUp;
-    this.npcXpGain = npcXpGain;
-    this.refreshDiv = refreshCharacterDataDiv;
+    registerCharacterFunctions(this);
 }
 
 function levelUp() {
@@ -85,12 +80,12 @@ function fight( actEnemy ) {
         var oppDmg = actEnemy.attackPower - this.defensePower;
         contentDiv.textContent = "";
         while( ( ( actEnemy.healthPoint -= playerDmg ) > 0 ) && ( ( this.healthPoint -= oppDmg ) > 0 ) ) {
-            contentDiv.textContent += "His opponent damaged him: -"  + oppDmg + " health point\n";
-            contentDiv.textContent += "Rhonin attacked: " + playerDmg + " damages\n";			
+            contentDiv.textContent += "His opponent damaged him: -"  + oppDmg + " health point. Remained " + this.healthPoint + "\n";
+            contentDiv.textContent += "Rhonin attacked: " + playerDmg + " damages. " + actEnemy.healthPoint + " health remained.\n";			
         }
         //player died
         if(this.healthPoint <= 0){
-            contentDiv.textContent += "Rhonin died, the game is lost\n";
+            showAlert("Rhonin died, the game is lost. Upon continuing, the first episode will appear\n");
             character = new Character();
             episode = 1;
         //player survived
@@ -117,10 +112,33 @@ function npcXpGain( actEnemy ){
 		}
 }
 
+
+/**
+ *UTILITIES
+ */
 function refreshCharacterDataDiv( div ) {
     div.textContent = "Attack power: " + this.attackPower + "\n" +
                     "Defense power: " + this.defensePower + "\n" +
                     "Health point: " + this.healthPoint + "\n" +
                     "Level: " + this.level + "\n" +
                     "Experience: " + this.experience;
+}
+
+function registerCharacterFunctions(object) {
+    object.fail = fail;
+    object.reward = reward;
+    object.fight = fight;
+    object.xpToLevelUp = xpToLevelUp;
+    object.npcXpGain = npcXpGain;
+    object.refreshDiv = refreshCharacterDataDiv;
+}
+
+function saveCharacter(storage, object) {
+    storage.setItem('character', JSON.stringify(object));
+}
+
+function loadCharacter(storage) {
+    var object = JSON.parse(storage.getItem('character'));
+    registerCharacterFunctions(object);
+    return object;
 }
