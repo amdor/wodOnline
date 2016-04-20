@@ -9,33 +9,6 @@ var contentDiv;
 var titleHead;
 var characterStatDiv;
 
-/**
- * addEvent function for crossplatform add event capability
- * STATIC USE
- * http://stackoverflow.com/questions/6927637/addeventlistener-in-internet-explorer
- */
-function addEvent(elem, type, handler) {
-   if (elem.addEventListener) { // W3C DOM
-      elem.addEventListener(type,handler,false);
-   } else if (elem.attachEvent) { // IE DOM
-      elem.attachEvent("on"+type, handler);
-   } else { // No much to do
-      elem["on" + type] = handler;
-   }
-}
-
-//STATIC USE
-//http://stackoverflow.com/questions/12949590/how-to-detach-event-in-ie-6-7-8-9-using-javascript
-function removeEvent(elem, type, handler) {
-   if (elem.removeEventListener) {
-       elem.removeEventListener(type, handler, false);
-   } else if (elem.detachEvent) {
-       elem.detachEvent("on" + type, handler);
-   } else {
-       elem["on" + type] = null;
-   }
-}
-
 
 /**
  * Saves important user data to sessionStorage before leaving the page
@@ -43,7 +16,7 @@ function removeEvent(elem, type, handler) {
 function beforeWindowUnload(event) {
    if( typeof(Storage) !== undefined ) {
       sessionStorage.episode = episode;
-      saveCharacter(localStorage, character);
+      saveCharacter(sessionStorage, character);
    }
 }
 /**
@@ -51,7 +24,36 @@ function beforeWindowUnload(event) {
  */
 function windowLoaded(event) {
    //Make navbar
-   document.body.insertBefore( createNavbar(), document.body.firstChild );
+   //document.body.insertBefore( createNavbar(), document.body.firstChild );
+   addEvent( document.getElementById("newGameNavElem"), "click", function(event){
+      episode = 1;
+      character = new Character();
+      loadStory(episode);
+      indexStoryState();
+   });
+   addEvent( document.getElementById("loadGameNavElem"), "click", function(event){
+      if( typeof(Storage) !== undefined ) {
+          episode = localStorage.episode;
+          character = loadCharacter(localStorage);
+          loadStory(episode);
+          indexStoryState();
+      } else {
+          showAlert("Your browser does not support Storage, sorry");
+      }
+   });
+   addEvent( document.getElementById("saveGameNavElem"), "click", function(event){
+      if( typeof(Storage) !== undefined ) {
+          if ( localStorage.episode + 5 <= episode || localStorage.episode >= episode ) {
+              localStorage.episode = episode;
+              saveCharacter(localStorage, character);
+              showInfo("Saved");
+          } else {
+              showAlert("Sorry, but 1 save in 5 episodes at maximum.");
+          }
+      } else {
+          showAlert("Your browser does not support Storage, sorry");
+      }
+   });
    
    titleHead = document.createElement("h3");
    titleHead.id = "title_Div";
@@ -62,7 +64,7 @@ function windowLoaded(event) {
    storyContainer.insertBefore(contentDiv, storyContainer.firstChild);
    storyContainer.insertBefore(titleHead, contentDiv);
    
-   episode = (typeof(Storage) !== undefined) ? ((sessionStorage.episode !== undefined) ? sessionStorage.episode : 1) : 1;
+   episode = (typeof(Storage) !== undefined) ? ((sessionStorage.episode > 0) ? sessionStorage.episode : 1) : 1;
    loadStory(episode);
    
    character =  (typeof(Storage) !== undefined) ? (sessionStorage.character !== undefined) ? loadCharacter(sessionStorage) : new Character() : new Character();
@@ -99,7 +101,6 @@ function nextStoryLoad() {
 ///STATE CHANGE///
 /////////////////
 function indexStoryState() {
-   character.refreshDiv( characterStatDiv );
    removeEvent( contentDiv.parentNode, "click", nextStoryLoad );
    addEvent(document.getElementById("answer_row"), "click", answerClicked);
    removeAnswerButtonsAttribute("disabled");

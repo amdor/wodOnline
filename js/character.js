@@ -4,6 +4,7 @@
  * Controls game dynamics
  */
 var maxHP;
+var characterStatDiv = document.getElementById( "character_stat" );
 
 function Character() {
     this.attackPower = 10;
@@ -43,6 +44,7 @@ function xpToLevelUp() {
             this.levelUp();
         }
     }
+    this.refreshDiv( characterStatDiv);
 }
 
 function fail() {
@@ -57,6 +59,19 @@ function reward() {
     this.experience += gain;
     this.xpToLevelUp();
     return gain;
+}
+
+function npcXpGain( actEnemy ){
+		var base = this.level * 5 + 45;	
+		if( this.level >= actEnemy.level ){
+			this.experience += base;
+			this.xpToLevelUp();
+			return base;
+		} else {
+			this.experience += base * (actEnemy.level - this.level);
+			this.xpToLevelUp();
+			return base * (actEnemy.level - this.level);
+		}
 }
 
 function fight( actEnemy ) {
@@ -97,19 +112,6 @@ function fight( actEnemy ) {
         }
         
     }
-}
-
-function npcXpGain( actEnemy ){
-		var base = this.level * 5 + 45;	
-		if( this.level >= actEnemy.level ){
-			this.experience += base;
-			this.xpToLevelUp();
-			return base;
-		} else {
-			this.experience += base * (actEnemy.level - this.level);
-			this.xpToLevelUp();
-			return base * (actEnemy.level - this.level);
-		}
 }
 
 

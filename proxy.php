@@ -20,11 +20,21 @@ function getStoryText( $episode, $manager) {
 
 function getNPC( $enemy, $manager ) {
     logToFile("getNPC started with npc $enemy");
-    $query = new MongoDB\Driver\Query( array('Name' => $enemy ) );
+    $query = null;
+    if($enemy) {
+        $query = new MongoDB\Driver\Query( array('Name' => $enemy ) );
+    } else {
+        $query = new MongoDb\Driver\Query(array());
+    }
     $cursor = $manager ->executeQuery('heroku_6czfjjnr.NPC', $query);
     $documentArray = $cursor -> toArray();
-    logToFile( "Enemy " + $documentArray[0]);
-    return json_encode( $documentArray[0] );
+    if($enemy) {    
+        logToFile( "Enemy " + $documentArray[0]);
+        return json_encode( $documentArray[0] );   
+    } else {
+        logToFile( "First enemy " + $documentArray[0] );
+        return json_encode( $documentArray );
+    }
 }
 
 
@@ -85,7 +95,7 @@ function whiteListAnswerLetter($answerLetter) {
 
 function checkEnemy( $enemy ) {
     logToFile( "checkEnemy start" );
-    if( preg_match("/^\w{1,15}/", $enemy) ) {
+    if( preg_match("/^\w{0,15}/", $enemy) ) {
         return true;
     } else {
         http_response_code( 400 );

@@ -36,15 +36,10 @@ function createNavbar () {
     navListContainer.className = "collapse navbar-collapse";
     navListContainer.id = "comparatorNavbar";
     
-    var navList = document.createElement("UL");
-    navList.className = "nav navbar-nav navbar-right";
-    //navList.style.width = "100%"
-    //navList.style.textAlign = "center";
+    var gameFunctionsNavList = document.createElement("UL");
+    gameFunctionsNavList.className = "nav navbar-nav navbar-right";
     
     var playListElement = document.createElement("LI");
-    //playListElement.className = "active";
-    //playListElement.style.cssFloat = "none"
-    //playListElement.style.display = "inline-block";
     
     var newGameAnchor = document.createElement("A");
     newGameAnchor.href = "#";
@@ -57,14 +52,12 @@ function createNavbar () {
     });
     
     var loadListElement = document.createElement("LI");
-    //loadListElement.style.cssFloat = "none"
-    //loadListElement.style.display = "inline-block";
     
     var loadListAnchor = document.createElement("A");
     loadListAnchor.href = "#";//todo
     loadListAnchor.innerHTML = "Load";
     addEvent( loadListAnchor, "click", function(event){
-        if( typeof(Storage) !== undefined ) {//TODO NOT WORKING
+        if( typeof(Storage) !== undefined ) {
             episode = localStorage.episode;
             character = loadCharacter(localStorage);
             loadStory(episode);
@@ -93,14 +86,28 @@ function createNavbar () {
         }
     });
     
+    //info navlist buttons
+    var infoNavList = document.createElement("UL");
+    infoNavList.className = "nav navbar-nav";
+    
+    var npcBookListElement = document.createElement("LI");
+    
+    var npcBookAnchor = document.createElement("A");
+    npcBookAnchor.innerHTML = "NPC Book";
+    npcBookAnchor.href = "#";
+    
     //Making the containment
     loadListElement.appendChild(loadListAnchor);
     playListElement.appendChild(newGameAnchor);
     saveListElement.appendChild(saveListAnchor);
-    navList.appendChild(playListElement);
-    navList.appendChild(loadListElement);
-    navList.appendChild(saveListElement);
-    navListContainer.appendChild(navList);
+    gameFunctionsNavList.appendChild(playListElement);
+    gameFunctionsNavList.appendChild(loadListElement);
+    gameFunctionsNavList.appendChild(saveListElement);
+    navListContainer.appendChild(gameFunctionsNavList);
+    
+    npcBookListElement.appendChild(npcBookAnchor);
+    infoNavList.appendChild(npcBookListElement);
+    navListContainer.appendChild(infoNavList);
     
     collapseButton.appendChild(iconSpan);
     collapseButton.appendChild(iconSpan.cloneNode());
