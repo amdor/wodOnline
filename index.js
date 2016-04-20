@@ -41,7 +41,7 @@ function removeEvent(elem, type, handler) {
  * Saves important user data to sessionStorage before leaving the page
  */
 function beforeWindowUnload(event) {
-   if( typeof(Storage) !== "undefined" ) {
+   if( typeof(Storage) !== undefined ) {
       sessionStorage.episode = episode;
       saveCharacter(localStorage, character);
    }
@@ -62,10 +62,10 @@ function windowLoaded(event) {
    storyContainer.insertBefore(contentDiv, storyContainer.firstChild);
    storyContainer.insertBefore(titleHead, contentDiv);
    
-   episode = (typeof(Storage) !== "undefined") ? ((sessionStorage.episode !== "undefined") ? sessionStorage.episode : 1) : 1;
+   episode = (typeof(Storage) !== undefined) ? ((sessionStorage.episode !== undefined) ? sessionStorage.episode : 1) : 1;
    loadStory(episode);
    
-   character =  (typeof(Storage) !== "undefined") ? (sessionStorage.character !== "undefined") ? loadCharacter(sessionStorage) : new Character() : new Character();
+   character =  (typeof(Storage) !== undefined) ? (sessionStorage.character !== undefined) ? loadCharacter(sessionStorage) : new Character() : new Character();
    
    characterStatDiv = document.getElementById( "character_stat" );
    character.refreshDiv( characterStatDiv );

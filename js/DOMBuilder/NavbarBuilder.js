@@ -42,13 +42,19 @@ function createNavbar () {
     //navList.style.textAlign = "center";
     
     var playListElement = document.createElement("LI");
-    playListElement.className = "active";
+    //playListElement.className = "active";
     //playListElement.style.cssFloat = "none"
     //playListElement.style.display = "inline-block";
     
-    var playAnchor = document.createElement("A");
-    playAnchor.href = "#";//todo
-    playAnchor.innerHTML = "Play";
+    var newGameAnchor = document.createElement("A");
+    newGameAnchor.href = "#";
+    newGameAnchor.innerHTML = "New game";
+    addEvent( newGameAnchor, "click", function(event){
+        episode = 1;
+        character = new Character();
+        loadStory(episode);
+        indexStoryState();
+    });
     
     var loadListElement = document.createElement("LI");
     //loadListElement.style.cssFloat = "none"
@@ -57,12 +63,43 @@ function createNavbar () {
     var loadListAnchor = document.createElement("A");
     loadListAnchor.href = "#";//todo
     loadListAnchor.innerHTML = "Load";
+    addEvent( loadListAnchor, "click", function(event){
+        if( typeof(Storage) !== undefined ) {//TODO NOT WORKING
+            episode = localStorage.episode;
+            character = loadCharacter(localStorage);
+            loadStory(episode);
+            indexStoryState();
+        } else {
+            showAlert("Your browser does not support Storage, sorry");
+        }
+    });
+    
+    var saveListElement = document.createElement("LI");
+    
+    var saveListAnchor = document.createElement("A");
+    saveListAnchor.href = "#";//todo
+    saveListAnchor.innerHTML = "Save";
+    addEvent( saveListAnchor, "click", function(event){
+        if( typeof(Storage) !== undefined ) {
+            if ( localStorage.episode + 5 <= episode || localStorage.episode >= episode ) {
+                localStorage.episode = episode;
+                saveCharacter(localStorage, character);
+                showInfo("Saved");
+            } else {
+                showAlert("Sorry, but 1 save in 5 episodes at maximum.");
+            }
+        } else {
+            showAlert("Your browser does not support Storage, sorry");
+        }
+    });
     
     //Making the containment
     loadListElement.appendChild(loadListAnchor);
-    playListElement.appendChild(playAnchor);
+    playListElement.appendChild(newGameAnchor);
+    saveListElement.appendChild(saveListAnchor);
     navList.appendChild(playListElement);
     navList.appendChild(loadListElement);
+    navList.appendChild(saveListElement);
     navListContainer.appendChild(navList);
     
     collapseButton.appendChild(iconSpan);
