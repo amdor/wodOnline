@@ -46,7 +46,9 @@ function windowLoaded(event) {
    });
    addEvent( document.getElementById("saveGameNavElem"), "click", function(event){
       if( typeof(Storage) !== undefined ) {
-          if ( localStorage.episode + 5 <= episode || localStorage.episode >= episode ) {
+          if ( !(localStorage.episode > 0)
+               || localStorage.episode + 5 <= episode
+               || localStorage.episode > episode ) {
               localStorage.episode = episode;
               saveCharacter(localStorage, character);
               showInfo("Saved");
@@ -207,11 +209,12 @@ function showAlert( msg ) {
 
 function showInfo( msg ) {
     var infoAlert = document.createElement("DIV");
-    infoAlert.className = "col-md-10 alert alert-info fade in";
+    infoAlert.className = "alert alert-info fade in text-center";
     infoAlert.role = "alert";
     infoAlert.id = "temp_Info";
-    var storyContainer = $("#story_container");
-    storyContainer.insertBefore(storyContainer.firstChild, infoAlert);
+    infoAlert.innerHTML = msg;
+    var storyContainer = $("#content_container");
+    storyContainer.prepend(infoAlert);
     $("#temp_Info").delay(4000).fadeOut(800, function(){
          $(this).alert('close');
     });
