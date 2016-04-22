@@ -28,15 +28,18 @@ function windowLoaded(event) {
    addEvent( document.getElementById("newGameNavElem"), "click", function(event){
       episode = 1;
       character = new Character();
+      sessionStorage.clear();
       loadStory(episode);
       indexStoryState();
+      character.refreshDiv( characterStatDiv );
    });
    addEvent( document.getElementById("loadGameNavElem"), "click", function(event){
       if( typeof(Storage) !== undefined ) {
-          episode = localStorage.episode;
-          character = loadCharacter(localStorage);
-          loadStory(episode);
-          indexStoryState();
+         episode = localStorage.episode;
+         character = loadCharacter(localStorage);
+         loadStory(episode);
+         indexStoryState();
+         character.refreshDiv( characterStatDiv );
       } else {
           showAlert("Your browser does not support Storage, sorry");
       }
