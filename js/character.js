@@ -27,20 +27,19 @@ function levelUp() {
 
 function xpToLevelUp() {
     if( this.level < 11 ) {
-			if( ( this.experience - ( 40 * this.level * this.level ) +
-                            ( 360 * this.level ) ) <= 0 ) {		
+			if( ( this.experience - ( 40 * this.level * this.level )
+                            - ( 360 * this.level ) ) >= 0 ) {		
 				this.experience -= ( 40 * this.level * this.level ) + ( 360 * this.level );
-				this.experience += 2 * this.experience;
 				this.levelUp();
             }				
 	}
 		
     if( this.level >= 11 ) {
         if( ( this.experience - ( 0.4 * this.level * this.level * this.level )
-                + ( 40 * this.level * this.level ) + ( 396 * this.level ) ) <= 0 ){
+                    - ( 40 * this.level * this.level )
+                    - ( 396 * this.level ) ) >= 0 ){
             this.experience -= ( 0.4 * this.level*this.level * this.level )
                 + ( 40 * this.level * this.level ) + ( 396 * this.level );
-            this.experience += this.experience * 2;
             this.levelUp();
         }
     }
@@ -93,10 +92,19 @@ function fight( actEnemy ) {
     else {
         var playerDmg = this.attackPower - actEnemy.defensePower;
         var oppDmg = actEnemy.attackPower - this.defensePower;
+        var rndPlayerDmg = Math.floor(playerDmg * ((Math.random() * 1.5) + 0.8)); //damage * [0.8..1.5]
+        var rndOppDmg = Math.floor(oppDmg * ((Math.random() * 1.5) + 0.8));
         contentDiv.textContent = "";
-        while( ( ( actEnemy.healthPoint -= playerDmg ) > 0 ) && ( ( this.healthPoint -= oppDmg ) > 0 ) ) {
-            contentDiv.textContent += "His opponent damaged him: -"  + oppDmg + " health point. Remained " + this.healthPoint + "\n";
-            contentDiv.textContent += "Rhonin attacked: " + playerDmg + " damages. " + actEnemy.healthPoint + " health remained.\n";			
+        while( ( ( actEnemy.healthPoint -= rndPlayerDmg ) > 0 )
+              && ( ( this.healthPoint -= rndOppDmg ) > 0 ) ) {
+            rndPlayerDmg = Math.floor(playerDmg * ((Math.random() * 1.5) + 1));
+            rndOppDmg = Math.floor(oppDmg * ((Math.random() * 1.5) + 1));
+            contentDiv.textContent += "His opponent damaged him: -"  + rndOppDmg
+                    + " health point. Remained " + this.healthPoint;
+            contentDiv.textContent += (rndOppDmg > oppDmg * 1.4) ? "\tCRITICAL HIT\n" : "\n";
+            contentDiv.textContent += "Rhonin attacked: " + rndPlayerDmg + " damages. "
+                    + actEnemy.healthPoint + " health remained.";
+            contentDiv.textContent += (rndPlayerDmg > playerDmg * 1.4) ? "\tCRITICAL HIT\n" : "\n";
         }
         //player died
         if(this.healthPoint <= 0){
@@ -130,6 +138,7 @@ function registerCharacterFunctions(object) {
     object.fail = fail;
     object.reward = reward;
     object.fight = fight;
+    object.levelUp = levelUp;
     object.xpToLevelUp = xpToLevelUp;
     object.npcXpGain = npcXpGain;
     object.refreshDiv = refreshCharacterDataDiv;

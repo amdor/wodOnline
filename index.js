@@ -157,7 +157,7 @@ function getAnswer( ep, answer ) {
    var xhttp = new XMLHttpRequest();
    xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
-         handleAnswerResponse( xhttp.responseText );
+         handleAnswerResponse( JSON.parse( xhttp.responseText ) );
       } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
          showAlert("Request resulted in error");
       }
@@ -168,15 +168,17 @@ function getAnswer( ep, answer ) {
 
 function handleAnswerResponse( answerResponse ) {
    var xpGain = 0;
-   if ( answerResponse === "fail" ) {
+   if ( answerResponse.outcome === "fail" ) {
       xpGain = character.fail();
       episode++;
-      contentDiv.textContent = "Hasn't saved the world today. \n Gained " + 
+      contentDiv.textContent = answerResponse.storyText;
+      contentDiv.textContent += "Hasn't saved the world today. \n Gained " + 
                      xpGain + " experience";
-    } else if ( answerResponse === "reward" ) {
+    } else if ( answerResponse.outcome === "reward" ) {
       xpGain = character.reward();
       episode++;
-      contentDiv.textContent = "The well-deserved reward is " +  
+      contentDiv.textContent = answerResponse.storyText;
+      contentDiv.textContent += "The well-deserved reward is " +  
                      xpGain + " experience";
     } else {
       var xhttp = new XMLHttpRequest();
@@ -189,13 +191,14 @@ function handleAnswerResponse( answerResponse ) {
             showAlert("Request resulted in error");
          }
       };
-      xhttp.open("GET", "proxy.php?npc=" + answerResponse, true);
+      xhttp.open("GET", "proxy.php?npc=" + answerResponse.outcome, true);
       xhttp.send();     
 
     }
 }
 
 function showAlert( msg ) {
+   $("#temp_Alert").alert('close');
    var notificationAlert = document.createElement("DIV");
    notificationAlert.className = "col-md-10 alert alert-danger fade in";
    notificationAlert.role = "alert";
@@ -216,6 +219,6 @@ function showInfo( msg ) {
     var storyContainer = $("#content_container");
     storyContainer.prepend(infoAlert);
     $("#temp_Info").delay(4000).fadeOut(800, function(){
-         $(this).alert('close');
+         $("#temp_Info").alert('close');
     });
 }

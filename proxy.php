@@ -6,8 +6,8 @@ function getAnswer($episode, $answerLetter, $manager) {
     $query = new MongoDB\Driver\Query( array('Episode' => intval($episode) ) );
     $cursor = $manager ->executeQuery('heroku_6czfjjnr.answer', $query);
     $documentArray = $cursor -> toArray();
-    logToFile("Answer is " + $documentArray[0]->$answerLetter);
-    return $documentArray[0]->$answerLetter;
+    //logToFile("Answer is " + $documentArray[0]->$answerLetter);
+    return json_encode($documentArray[0]->$answerLetter);
 }
 
 function getStoryText( $episode, $manager) {
