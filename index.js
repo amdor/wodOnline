@@ -168,6 +168,7 @@ function getAnswer( ep, answer ) {
 
 function handleAnswerResponse( answerResponse ) {
    var xpGain = 0;
+   answerResponse.storyText += "\n";
    if ( answerResponse.outcome === "fail" ) {
       xpGain = character.fail();
       episode++;
