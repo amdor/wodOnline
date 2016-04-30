@@ -29,3 +29,18 @@ function removeEvent(elem, type, handler) {
        elem["on" + type] = null;
    }
 }
+
+
+
+/**
+ *Appends a responsive image to the given element
+ */
+function appendImage( imagePath, elementSelect) {
+   var $downloadingImage = $("<img>");
+   var $image = $("<img class=\"responsive\">");
+   $downloadingImage.load(function(){
+      $image.attr("src", $(this).attr("src"));
+   });
+   $downloadingImage.attr( "src", imagePath );
+   $(elementSelect).append( $image );
+}

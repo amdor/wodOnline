@@ -26,12 +26,11 @@ function windowLoaded(event) {
    //Make navbar
    //document.body.insertBefore( createNavbar(), document.body.firstChild );
    addEvent( document.getElementById("newGameNavElem"), "click", function(event){
-      episode = 1;
+      episode = 0;
       character = new Character();
       sessionStorage.clear();
-      loadStory(episode);
-      indexStoryState();
-      character.refreshDiv( characterStatDiv );
+      //loadStory(episode);
+      indexNewGameState();
    });
    addEvent( document.getElementById("loadGameNavElem"), "click", function(event){
       if( typeof(Storage) !== undefined ) {
@@ -69,14 +68,23 @@ function windowLoaded(event) {
    storyContainer.insertBefore(contentDiv, storyContainer.firstChild);
    storyContainer.insertBefore(titleHead, contentDiv);
    
-   episode = (typeof(Storage) !== undefined) ? ((sessionStorage.episode > 0) ? sessionStorage.episode : 1) : 1;
-   loadStory(episode);
-   
-   character =  (typeof(Storage) !== undefined) ? (sessionStorage.character !== undefined) ? loadCharacter(sessionStorage) : new Character() : new Character();
-   
    characterStatDiv = document.getElementById( "character_stat" );
-   character.refreshDiv( characterStatDiv );
    
+   episode = (typeof(Storage) !== undefined) ? ((sessionStorage.episode > 0) ? sessionStorage.episode : 0) : 0;
+   character =  (typeof(Storage) !== undefined) ?
+                     (sessionStorage.character !== undefined) ?
+                        loadCharacter(sessionStorage) : new Character()
+                     : new Character();
+   if (episode > 0) {
+      indexStoryState();
+      loadStory(episode);
+   } else {
+      indexNewGameState();
+   }
+   
+   //characterStatDiv = document.getElementById( "character_stat" );
+   //character.refreshDiv( characterStatDiv );
+ 
    addEvent(document.getElementById("answer_row"), "click", answerClicked);
 }
 
@@ -97,6 +105,7 @@ function answerClicked(event) {
 
 
 function nextStoryLoad() {
+   episode++;
    loadStory( episode );
    character.healthPoint = (character.healthPoint <= maxHP - 20) ? character.healthPoint + 20 : maxHP;
    indexStoryState();
@@ -106,15 +115,25 @@ function nextStoryLoad() {
 ///STATE CHANGE///
 /////////////////
 function indexStoryState() {
+   $("#story_container").children().empty();
+   $("#story_container").children("img").remove();
    removeEvent( contentDiv.parentNode, "click", nextStoryLoad );
    addEvent(document.getElementById("answer_row"), "click", answerClicked);
    removeAnswerButtonsAttribute("disabled");
+   character.refreshDiv( characterStatDiv );
 }
 
 function indexAnsweredState() {
    addEvent( contentDiv.parentNode, "click", nextStoryLoad );
    removeEvent(document.getElementById("answer_row"), "click", answerClicked);
    setAnswerButtonsAttribute("disabled", "disabled");
+   character.refreshDiv( characterStatDiv );
+}
+
+function indexNewGameState() {
+   indexAnsweredState();
+   $("#story_container").children().empty();
+   appendImage( "img/start.png", contentDiv );
 }
 
 function setAnswerButtonsAttribute(name, value) {
@@ -171,13 +190,11 @@ function handleAnswerResponse( answerResponse ) {
    answerResponse.storyText += "\n";
    if ( answerResponse.outcome === "fail" ) {
       xpGain = character.fail();
-      episode++;
       contentDiv.textContent = answerResponse.storyText;
       contentDiv.textContent += "Hasn't saved the world today. \n Gained " + 
                      xpGain + " experience";
     } else if ( answerResponse.outcome === "reward" ) {
       xpGain = character.reward();
-      episode++;
       contentDiv.textContent = answerResponse.storyText;
       contentDiv.textContent += "The well-deserved reward is " +  
                      xpGain + " experience";
@@ -185,7 +202,6 @@ function handleAnswerResponse( answerResponse ) {
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
          if (xhttp.readyState == 4 && xhttp.status == 200) {
-            episode++;
             var npc = JSON.parse( xhttp.responseText );
             character.fight( npc );
          } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
