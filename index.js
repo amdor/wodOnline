@@ -86,6 +86,7 @@ function windowLoaded(event) {
    //character.refreshDiv( characterStatDiv );
  
    addEvent(document.getElementById("answer_row"), "click", answerClicked);
+   addEvent(storyContainer, "click", toggleNav);
 }
 
 function answerClicked(event) {
@@ -134,6 +135,13 @@ function indexNewGameState() {
    indexAnsweredState();
    $("#story_container").children().empty();
    appendImage( "img/start.png", contentDiv );
+}
+
+function toggleNav(event) {
+   var navbarControl = $('.navbar-toggle');
+   if ( navbarControl.attr("aria-expanded") === 'true' ) {
+      $("#toggleNavbar").collapse('hide');
+   }
 }
 
 function setAnswerButtonsAttribute(name, value) {
