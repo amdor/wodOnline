@@ -15,7 +15,8 @@ function windowLoaded( ) {
         }
     };
     xhttp.open("GET", "proxy.php?npc", true);
-    xhttp.send();    
+    xhttp.send();
+    addEvent(document.getElementById("content_container"), "click", toggleNav);
 }
 
 /**

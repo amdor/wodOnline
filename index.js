@@ -137,13 +137,6 @@ function indexNewGameState() {
    appendImage( "img/start.png", contentDiv );
 }
 
-function toggleNav(event) {
-   var navbarControl = $('.navbar-toggle');
-   if ( navbarControl.attr("aria-expanded") === 'true' ) {
-      $("#toggleNavbar").collapse('hide');
-   }
-}
-
 function setAnswerButtonsAttribute(name, value) {
    document.getElementById("answerA").setAttribute(name, value);
    document.getElementById("answerB").setAttribute(name, value);

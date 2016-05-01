@@ -44,3 +44,10 @@ function appendImage( imagePath, elementSelect) {
    $downloadingImage.attr( "src", imagePath );
    $(elementSelect).append( $image );
 }
+
+function toggleNav(event) {
+   var navbarControl = $('.navbar-toggle');
+   if ( navbarControl.attr("aria-expanded") === 'true' ) {
+      $("#toggleNavbar").collapse('hide');
+   }
+}
