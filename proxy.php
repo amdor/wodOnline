@@ -76,7 +76,7 @@ function checkEpisode($episode) {
     if( empty($episode) ) {
         logToFile( "Episode is empty" );
         return false;
-    } elseif ( 100 < intval($episode) || 0 > intval($episode) ) {
+    } elseif ( 100 < intval($episode)%1000 || 0 > intval($episode) ) {
         http_response_code( 400 );
         return false;
     }

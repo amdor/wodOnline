@@ -29,6 +29,7 @@ function windowLoaded(event) {
       episode = 0;
       character = new Character();
       sessionStorage.clear();
+      localStorage.clear();
       //loadStory(episode);
       indexNewGameState();
    });
@@ -106,7 +107,7 @@ function answerClicked(event) {
 
 
 function nextStoryLoad() {
-   episode++;
+   //episode++;
    loadStory( episode );
    character.healthPoint = (character.healthPoint <= maxHP - 20) ? character.healthPoint + 20 : maxHP;
    indexStoryState();
@@ -132,6 +133,7 @@ function indexAnsweredState() {
 }
 
 function indexNewGameState() {
+   episode = 1;
    indexAnsweredState();
    $("#story_container").children().empty();
    appendImage( "img/start.png", contentDiv );
@@ -213,6 +215,9 @@ function handleAnswerResponse( answerResponse ) {
       xhttp.send();     
 
     }
+    
+    //next chapter
+    episode = (answerResponse.next == undefined) ? episode + 1 : answerResponse.next;
 }
 
 function showAlert( msg ) {
