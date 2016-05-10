@@ -109,7 +109,7 @@ function answerClicked(event) {
 function nextStoryLoad() {
    //episode++;
    loadStory( episode );
-   character.healthPoint = (character.healthPoint <= maxHP - 20) ? character.healthPoint + 20 : maxHP;
+   character.healthPoint = (character.healthPoint <= character.maxHP - 20) ? character.healthPoint + 20 : character.maxHP;
    indexStoryState();
 }
 
@@ -117,7 +117,8 @@ function nextStoryLoad() {
 ///STATE CHANGE///
 /////////////////
 function indexStoryState() {
-   $("#story_container").children().empty();
+   $(titleHead).empty();
+   $(contentDiv).empty();
    $("#story_container").children("img").remove();
    removeEvent( contentDiv.parentNode, "click", nextStoryLoad );
    addEvent(document.getElementById("answer_row"), "click", answerClicked);
@@ -135,7 +136,9 @@ function indexAnsweredState() {
 function indexNewGameState() {
    episode = 1;
    indexAnsweredState();
-   $("#story_container").children().empty();
+   $(titleHead).empty();
+   $(contentDiv).empty();
+   $(characterStatDiv).empty();
    appendImage( "img/start.png", contentDiv );
 }
 
@@ -221,27 +224,24 @@ function handleAnswerResponse( answerResponse ) {
 }
 
 function showAlert( msg ) {
-   $("#temp_Alert").alert('close');
    var notificationAlert = document.createElement("DIV");
-   notificationAlert.className = "col-md-10 alert alert-danger fade in";
+   notificationAlert.className = "alert alert-danger fade in temp_Alert";
    notificationAlert.role = "alert";
-   notificationAlert.id = "temp_Alert";
    notificationAlert.innerHTML = msg;
-   contentDiv.parentNode.appendChild(notificationAlert);
-   $("#temp_Alert").delay(4000).fadeOut(800, function() {
+   $("#content_container").prepend(notificationAlert);
+   $(".temp_Alert").delay(4000).fadeOut(800, function() {
       $(this).alert('close');
    });
 }
 
 function showInfo( msg ) {
-    var infoAlert = document.createElement("DIV");
-    infoAlert.className = "alert alert-info fade in text-center";
-    infoAlert.role = "alert";
-    infoAlert.id = "temp_Info";
-    infoAlert.innerHTML = msg;
-    var storyContainer = $("#content_container");
-    storyContainer.prepend(infoAlert);
-    $("#temp_Info").delay(4000).fadeOut(800, function(){
-         $("#temp_Info").alert('close');
-    });
+   var infoAlert = document.createElement("DIV");
+   infoAlert.className = "alert alert-info fade in text-center";
+   infoAlert.role = "alert";
+   infoAlert.id = "temp_Info";
+   infoAlert.innerHTML = msg;
+   $("#content_container").prepend(infoAlert);
+   $("#temp_Info").delay(4000).fadeOut(800, function(){
+      $("#temp_Info").alert('close');
+   });
 }

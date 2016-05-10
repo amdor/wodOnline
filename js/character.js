@@ -3,14 +3,14 @@
  *
  * Controls game dynamics
  */
-var maxHP;
+
 var characterStatDiv = document.getElementById( "character_stat" );
 
 function Character() {
     this.attackPower = 10;
     this.defensePower = 8;
     this.healthPoint = 120;
-    maxHP = this.healthPoint;
+    this.maxHP = this.healthPoint;
     this.experience = 0;
     this.level = 1;
     registerCharacterFunctions(this);
@@ -19,8 +19,8 @@ function Character() {
 function levelUp() {
     this.attackPower += 2;
 	this.defensePower += 1;
-	maxHP += 20;
-    this.healthPoint = maxHP;
+	this.maxHP += 20;
+    this.healthPoint = this.maxHP;
 	this.experience = 0;
 	this.level++;
 }
@@ -108,7 +108,13 @@ function fight( actEnemy ) {
         }
         //player died
         if(this.healthPoint <= 0){
-            showAlert("Rhonin died, the game is lost. Upon continuing, the first episode will appear\n");
+            //showing a die modal
+            var modal = $(".modal");
+            modal.find(".modal-title").text("Game Over");
+            modal.find(".modal-body")
+                .html("<p>Rhonin died," + 
+                      "the game is lost. Upon continuing, the first episode will appear</p>");
+            modal.modal("show");
             character = new Character();
             episode = 1;
         //player survived
@@ -129,7 +135,7 @@ function fight( actEnemy ) {
 function refreshCharacterDataDiv( div ) {
     div.textContent = "Attack power: " + this.attackPower + "\n" +
                     "Defense power: " + this.defensePower + "\n" +
-                    "Health point: " + this.healthPoint + "\n" +
+                    "Health point: " + this.healthPoint + " / " + this.maxHP + "\n" +
                     "Level: " + this.level + "\n" +
                     "Experience: " + this.experience;
 }
