@@ -23,8 +23,7 @@ function beforeWindowUnload(event) {
  * Initialize page's dynamic contents
  */
 function windowLoaded(event) {
-   //Make navbar
-   //document.body.insertBefore( createNavbar(), document.body.firstChild );
+//Navbar events
    addEvent( document.getElementById("newGameNavElem"), "click", function(event){
       episode = 0;
       character = new Character();
@@ -60,17 +59,20 @@ function windowLoaded(event) {
       }
    });
    
-   titleHead = document.createElement("h3");
-   titleHead.id = "title_Div";
-   contentDiv = document.createElement("DIV");
-   contentDiv.id = "content_Div";
-   var storyContainer = document.getElementById("story_container");
-   storyContainer.style.cursor = "default";
-   storyContainer.insertBefore(contentDiv, storyContainer.firstChild);
-   storyContainer.insertBefore(titleHead, contentDiv);
+   //creating dynamic content containers
+   titleHead = $("<h3>", {id: "title_Div"});
+   contentDiv = $("<div>", {id: "content_Div"});
+   var storyContainer = $("#story_container");
+   storyContainer.css({"cursor": "default"});
+   storyContainer.prepend(titleHead, contentDiv);
+   
+   //as for the rest of the code need to be simple element
+   titleHead = document.getElementById("title_Div");
+   contentDiv = document.getElementById("content_Div");
    
    characterStatDiv = document.getElementById( "character_stat" );
    
+   //loading data, and showing it
    episode = (typeof(Storage) !== undefined) ? ((sessionStorage.episode > 0) ? sessionStorage.episode : 0) : 0;
    character =  (typeof(Storage) !== undefined) ?
                      (sessionStorage.character !== undefined) ?
@@ -82,12 +84,9 @@ function windowLoaded(event) {
    } else {
       indexNewGameState();
    }
-   
-   //characterStatDiv = document.getElementById( "character_stat" );
-   //character.refreshDiv( characterStatDiv );
  
    addEvent(document.getElementById("answer_row"), "click", answerClicked);
-   addEvent(storyContainer, "click", toggleNav);
+   addEvent(document.getElementById("story_container"), "click", toggleNav);
 }
 
 function answerClicked(event) {
@@ -107,10 +106,9 @@ function answerClicked(event) {
 
 
 function nextStoryLoad() {
-   //episode++;
+   indexStoryState();
    loadStory( episode );
    character.healthPoint = (character.healthPoint <= character.maxHP - 20) ? character.healthPoint + 20 : character.maxHP;
-   indexStoryState();
 }
 
 ///////////////////
@@ -120,6 +118,9 @@ function indexStoryState() {
    $(titleHead).empty();
    $(contentDiv).empty();
    $("#story_container").children("img").remove();
+   
+   $("#content_spinner").show();
+   
    removeEvent( contentDiv.parentNode, "click", nextStoryLoad );
    addEvent(document.getElementById("answer_row"), "click", answerClicked);
    removeAnswerButtonsAttribute("disabled");
@@ -156,7 +157,7 @@ function removeAnswerButtonsAttribute(name) {
    document.getElementById("answerD").removeAttribute(name);
 }
 
-function loadStory( ep ) {
+function loadStory( ep ) {               
    var xhttp = new XMLHttpRequest();
    xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -168,6 +169,9 @@ function loadStory( ep ) {
          }
       } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
          showAlert("Request resulted in error");
+      }
+      if (xhttp.readyState == 4 ) {
+         $("#content_spinner").hide();
       }
    };
    xhttp.open("GET", "proxy.php?story=" + ep, true);
