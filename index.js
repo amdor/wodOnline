@@ -38,7 +38,7 @@ function windowLoaded(event) {
          character = loadCharacter(localStorage);
          loadStory(episode);
          indexStoryState();
-         character.refreshDiv( characterStatDiv );
+         refreshCharacterData();
       } else {
           showAlert("Your browser does not support Storage, sorry");
       }
@@ -117,32 +117,53 @@ function nextStoryLoad() {
 function indexStoryState() {
    $(titleHead).empty();
    $(contentDiv).empty();
-   $("#story_container").children("img").remove();
    
    $("#content_spinner").show();
    
    removeEvent( contentDiv.parentNode, "click", nextStoryLoad );
    addEvent(document.getElementById("answer_row"), "click", answerClicked);
    removeAnswerButtonsAttribute("disabled");
-   character.refreshDiv( characterStatDiv );
+   refreshCharacterData();
 }
 
 function indexAnsweredState() {
    addEvent( contentDiv.parentNode, "click", nextStoryLoad );
    removeEvent(document.getElementById("answer_row"), "click", answerClicked);
    setAnswerButtonsAttribute("disabled", "disabled");
-   character.refreshDiv( characterStatDiv );
+   refreshCharacterData();
 }
 
 function indexNewGameState() {
    episode = 1;
-   indexAnsweredState();
+   removeEvent(document.getElementById("answer_row"), "click", answerClicked);
+   setAnswerButtonsAttribute("disabled", "disabled");
+   $("#content_spinner").hide();
    $(titleHead).empty();
    $(contentDiv).empty();
    $(characterStatDiv).empty();
+   $("#xp_progress_container").hide();
+   
    appendImage( "img/start.png", contentDiv );
+   $("#story_container").on("click", function(){
+      $("#story_container").off("click");
+      $(contentDiv).children("img").remove();
+      $("#xp_progress_container").show();
+      nextStoryLoad();
+   });
 }
 
+function refreshCharacterData() {
+   characterStatDiv.textContent = "Attack power: " + character.attackPower + "\n" +
+                    "Defense power: " + character.defensePower + "\n" +
+                    "Health point: " + character.healthPoint + " / " + character.maxHP + "\n" +
+                    "Level: " + character.level + "\n";
+   var newVal = Math.round( character.experience * 100 / character.nextLevelXP() );
+   $("#xp_progress_bar").width( newVal + "%" )
+            .attr( 'aria-valuenow', newVal );
+}
+///////////////////////////////////
+////Enable/disable answer buttons//
+///////////////////////////////////
 function setAnswerButtonsAttribute(name, value) {
    document.getElementById("answerA").setAttribute(name, value);
    document.getElementById("answerB").setAttribute(name, value);
@@ -157,6 +178,9 @@ function removeAnswerButtonsAttribute(name) {
    document.getElementById("answerD").removeAttribute(name);
 }
 
+///////////////////////////////////
+////Server communications//////////
+///////////////////////////////////
 function loadStory( ep ) {               
    var xhttp = new XMLHttpRequest();
    xhttp.onreadystatechange = function() {
@@ -227,6 +251,10 @@ function handleAnswerResponse( answerResponse ) {
     episode = (answerResponse.next == undefined) ? episode + 1 : answerResponse.next;
 }
 
+
+////////////////////////////////
+////User notifications//////////
+////////////////////////////////
 function showAlert( msg ) {
    var notificationAlert = document.createElement("DIV");
    notificationAlert.className = "alert alert-danger fade in temp_Alert";

@@ -72,3 +72,6 @@ a.socialIcon:hover, .socialHoverClass {
 .social-circle > li > a {
  background-color: #D3D3D3;   
 }
+
+.progress {background: rgba(245, 245, 245, 1); border: 3px solid rgba(245, 245, 245, 1); border-radius: 5px; height: 20px;}
+#xp_progress_bar {background: rgba(184, 11, 184, 1);}

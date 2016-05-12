@@ -4,7 +4,6 @@
  * Controls game dynamics
  */
 
-var characterStatDiv = document.getElementById( "character_stat" );
 
 function Character() {
     this.attackPower = 10;
@@ -26,24 +25,10 @@ function levelUp() {
 }
 
 function xpToLevelUp() {
-    if( this.level < 11 ) {
-			if( ( this.experience - ( 40 * this.level * this.level )
-                            - ( 360 * this.level ) ) >= 0 ) {		
-				this.experience -= ( 40 * this.level * this.level ) + ( 360 * this.level );
-				this.levelUp();
-            }				
-	}
-		
-    if( this.level >= 11 ) {
-        if( ( this.experience - ( 0.4 * this.level * this.level * this.level )
-                    - ( 40 * this.level * this.level )
-                    - ( 396 * this.level ) ) >= 0 ){
-            this.experience -= ( 0.4 * this.level*this.level * this.level )
-                + ( 40 * this.level * this.level ) + ( 396 * this.level );
-            this.levelUp();
-        }
+    if( ( this.experience - nextLevelXP() ) >= 0 ){
+        this.experience -= nextLevelXP();
+        this.levelUp();
     }
-    this.refreshDiv( characterStatDiv);
 }
 
 function fail() {
@@ -61,16 +46,16 @@ function reward() {
 }
 
 function npcXpGain( actEnemy ){
-		var base = this.level * 5 + 45;	
-		if( this.level >= actEnemy.level ){
-			this.experience += base;
-			this.xpToLevelUp();
-			return base;
-		} else {
-			this.experience += base * (actEnemy.level - this.level);
-			this.xpToLevelUp();
-			return base * (actEnemy.level - this.level);
-		}
+    var base = this.level * 5 + 45;	
+    if( this.level >= actEnemy.level ){
+        this.experience += base;
+        this.xpToLevelUp();
+        return base;
+    } else {
+        this.experience += base * (actEnemy.level - this.level);
+        this.xpToLevelUp();
+        return base * (actEnemy.level - this.level);
+    }
 }
 
 function fight( actEnemy ) {
@@ -132,14 +117,6 @@ function fight( actEnemy ) {
 /**
  *UTILITIES
  */
-function refreshCharacterDataDiv( div ) {
-    div.textContent = "Attack power: " + this.attackPower + "\n" +
-                    "Defense power: " + this.defensePower + "\n" +
-                    "Health point: " + this.healthPoint + " / " + this.maxHP + "\n" +
-                    "Level: " + this.level + "\n" +
-                    "Experience: " + this.experience;
-}
-
 function registerCharacterFunctions(object) {
     object.fail = fail;
     object.reward = reward;
@@ -147,7 +124,7 @@ function registerCharacterFunctions(object) {
     object.levelUp = levelUp;
     object.xpToLevelUp = xpToLevelUp;
     object.npcXpGain = npcXpGain;
-    object.refreshDiv = refreshCharacterDataDiv;
+    object.nextLevelXP = nextLevelXP;
 }
 
 function saveCharacter(storage, object) {
@@ -158,4 +135,18 @@ function loadCharacter(storage) {
     var object = JSON.parse(storage.getItem('character'));
     registerCharacterFunctions(object);
     return object;
+}
+
+/**
+ * Returns xp amount needed for the next level
+ */
+function nextLevelXP() {
+    if( this.level < 11 ) {
+        return ( 40 * this.level * this.level ) + ( 360 * this.level );			
+	}	
+    if( this.level >= 11 ) {
+        return ( 0.4 * this.level * this.level * this.level )
+                    + ( 40 * this.level * this.level )
+                    + ( 396 * this.level );
+    }
 }
