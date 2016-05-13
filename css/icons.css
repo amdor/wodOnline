@@ -31,7 +31,7 @@ a.socialIcon:hover, .socialHoverClass {
 	color:#44BCDD;
 }
 
-.social-circle li a {
+.social-circle li a, .social-circle div div.g-plusone {
 	display:inline-block;
 	position:relative;
 	margin:0 auto 0 auto;
@@ -73,5 +73,11 @@ a.socialIcon:hover, .socialHoverClass {
  background-color: #D3D3D3;   
 }
 
-.progress {background: rgba(245, 245, 245, 1); border: 3px solid rgba(245, 245, 245, 1); border-radius: 5px; height: 20px;}
+.progress {
+	background: rgba(245, 245, 245, 1);
+	border: 3px solid rgba(245, 245, 245, 1);
+	border-radius: 5px;
+	height: 25px;
+	vertical-align: baseline;
+}
 #xp_progress_bar {background: rgba(184, 11, 184, 1);}
