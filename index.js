@@ -24,17 +24,11 @@ function beforeWindowUnload(event) {
  */
 function windowLoaded(event) {
 //Navbar events
-   addEvent( document.getElementById("newGameNavElem"), "click", function(event){
-      episode = 0;
-      character = new Character();
-      sessionStorage.clear();
-      localStorage.clear();
-      //loadStory(episode);
-      indexNewGameState();
-   });
+   addEvent( document.getElementById("newGameNavElem"), "click", newGameClicked);
+   //addEvent( document.getElementById("modal_view"), "show.bs.modal", newGameClicked );
    addEvent( document.getElementById("loadGameNavElem"), "click", function(event){
       if( typeof(Storage) !== undefined ) {
-         episode = localStorage.episode;
+         episode = Number(localStorage.episode);
          character = loadCharacter(localStorage);
          loadStory(episode);
          indexStoryState();
@@ -45,17 +39,10 @@ function windowLoaded(event) {
    });
    addEvent( document.getElementById("saveGameNavElem"), "click", function(event){
       if( typeof(Storage) !== undefined ) {
-          if ( !(localStorage.episode > 0)
-               || localStorage.episode + 5 <= episode
-               || localStorage.episode > episode ) {
-              localStorage.episode = episode;
-              saveCharacter(localStorage, character);
-              showInfo("Saved");
-          } else {
-              showAlert("Sorry, but 1 save in 5 episodes at maximum.");
-          }
+         saveCharacter(localStorage, character);
+         showInfo("Saved");
       } else {
-          showAlert("Your browser does not support Storage, sorry");
+         showAlert("Your browser does not support Storage, sorry");
       }
    });
    
@@ -73,7 +60,7 @@ function windowLoaded(event) {
    characterStatDiv = document.getElementById( "character_stat" );
    
    //loading data, and showing it
-   episode = (typeof(Storage) !== undefined) ? ((sessionStorage.episode > 0) ? sessionStorage.episode : 0) : 0;
+   episode = (typeof(Storage) !== undefined) ? ((sessionStorage.episode > 0) ? Number(sessionStorage.episode) : 0) : 0;
    character =  (typeof(Storage) !== undefined) ?
                      (sessionStorage.character !== undefined) ?
                         loadCharacter(sessionStorage) : new Character()
@@ -89,6 +76,9 @@ function windowLoaded(event) {
    addEvent(document.getElementById("story_container"), "click", toggleNav);
 }
 
+////////////////
+///EVENTS///////
+////////////////
 function answerClicked(event) {
    var answer = "";
    if (event.target.id === "answerA") {
@@ -98,17 +88,42 @@ function answerClicked(event) {
    }  else if (event.target.id === "answerC") {
       getAnswer( episode, "C" );
    }  else if (event.target.id === "answerD") {
-      getAnswer( episode, "C" );
+      getAnswer( episode, "D" );
    }
    indexAnsweredState();
     
 }
 
-
 function nextStoryLoad() {
    indexStoryState();
    loadStory( episode );
    character.healthPoint = (character.healthPoint <= character.maxHP - 20) ? character.healthPoint + 20 : character.maxHP;
+}
+
+function newGameClicked() {
+   var button = $("<button>",
+                  {"class": "btn btn-primary",
+                  "id": "modal_confirm_button",
+                  "text": "Confirm" } ).on("click", newGameConfirmed);
+   var modal = $(".modal");
+   modal.find( "#modal_confirm_button" ).remove();
+   modal.find(".modal-title").text("New Game");
+   modal.find(".modal-body")
+       .html("<p>By clicking on confirm " + 
+             "the game restarts, all saved data will be lost.</p>");
+   modal.find(".modal-footer")
+            .append( button );
+   modal.modal("show");
+}
+
+function newGameConfirmed() {
+   $(".modal #modal_confirm_button").remove();
+   $(".modal").modal("hide");
+   episode = 0;
+   character = new Character();
+   sessionStorage.clear();
+   localStorage.clear();
+   indexNewGameState();
 }
 
 ///////////////////
@@ -188,8 +203,11 @@ function loadStory( ep ) {
          var response = JSON.parse( xhttp.responseText );
          titleHead.textContent = response.Title;
          contentDiv.textContent = response.Content;
+         setAnswerButtonsAttribute("disabled", "disabled");
+         $("#answer_row").children()
+                        .slice(0, response.Answers.length).children().removeAttr("disabled");
          for(var i = 0; i < response.Answers.length; i++) {
-            contentDiv.textContent += '\r\n'+response.Answers[i].text;
+            contentDiv.textContent += '\r\n\r\n'+response.Answers[i].text;
          }
       } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
          showAlert("Request resulted in error");
@@ -237,7 +255,16 @@ function handleAnswerResponse( answerResponse ) {
       xhttp.onreadystatechange = function() {
          if (xhttp.readyState == 4 && xhttp.status == 200) {
             var npc = JSON.parse( xhttp.responseText );
-            character.fight( npc );
+            xpGain = character.fight( npc );
+            if (xpGain > 0) {
+               contentDiv.textContent = answerResponse.storyText;
+               contentDiv.textContent += "The well-deserved reward is " +  
+                     xpGain + " experience";
+            } else if ( episode > 1 ) { //greater than 1 === lost but alive, cos resets on death
+               contentDiv.textContent = "Rhonin's opponent proved to be much more powerful than him " + 
+                   "luckily he could escape before got killed, as he realized the differences.\n"
+                   + "He lost " + this.healthPoint + " health points.";
+            }
          } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
             showAlert("Request resulted in error");
          }

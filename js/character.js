@@ -58,18 +58,22 @@ function npcXpGain( actEnemy ){
     }
 }
 
+/**
+ * Makes the fight: decreases life if needed, gives xp, levels up
+ * @returns xp gained by the fight: 0 if lost of course
+ */
 function fight( actEnemy ) {
+    var xpGain = 0;
     //enemy is too strong
     if(actEnemy.defensePower >= this.attackPower){
-        contentDiv.textContent = "Rhonin's opponent proved to be much more powerful than him " + 
-                "luckily he could escape before got killed, as he realized the differences.\n"
-                + "He lost " + this.healthPoint / 2 + " health points.";
+        //contentDiv.textContent = "Rhonin's opponent proved to be much more powerful than him " + 
+        //        "luckily he could escape before got killed, as he realized the differences.\n"
+        //        + "He lost " + this.healthPoint / 2 + " health points.";
         this.healthPoint -= this.healthPoint/2;
-        
     //opposit
     }else if(this.defensePower >= actEnemy.attackPower){
-        contentDiv.textContent = "Rhonin was so much stronger, the opponent didn't cause any trouble to him.\n";
-        var xpGain = this.npcXpGain(actEnemy);
+        //contentDiv.textContent = "Rhonin was so much stronger, the opponent didn't cause any trouble to him.\n";
+        xpGain = this.npcXpGain(actEnemy);
         contentDiv.textContent += "He gain " + xpGain + " experience";
     }
     
@@ -104,13 +108,12 @@ function fight( actEnemy ) {
             episode = 1;
         //player survived
         }else{
-            
-            contentDiv.textContent += "Rhonin won\n";
-            var xpGain = this.npcXpGain(actEnemy);
+            xpGain = this.npcXpGain(actEnemy);
             contentDiv.textContent += "Gained " + xpGain + " experiences";        
         }
         
     }
+    return xpGain;
 }
 
 
