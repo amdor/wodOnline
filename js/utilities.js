@@ -30,21 +30,6 @@ function removeEvent(elem, type, handler) {
    }
 }
 
-
-
-/**
- *Appends a responsive image to the given element
- */
-function appendImage( imagePath, elementSelect) {
-   var $downloadingImage = $("<img>");
-   var $image = $("<img class=\"responsive\">");
-   $downloadingImage.load(function(){
-      $image.attr("src", $(this).attr("src"));
-   });
-   $downloadingImage.attr( "src", imagePath );
-   $(elementSelect).append( $image );
-}
-
 function toggleNav(event) {
    var navbarControl = $('.navbar-toggle');
    if ( navbarControl.attr("aria-expanded") === 'true' ) {
