@@ -1,16 +1,21 @@
 var module = angular.module("storyModule");
 
-module.controller('StoryController', ['$scope', '$state', function ($scope, $state){
+module.controller('StoryController', ['$scope', '$state', 'characterUtils',
+                    function ($scope, $state, characterUtils){
 
-    $scope.chapterTitle;
-    $scope.chapterText;
-    $scope.showSpinner = false;
-    episode = $state.current.data.episode;
+    var episode = $state.current.data.episode;
+    var character = characterUtils.character;
+    $scope.chapterTitle = "";
+    $scope.chapterText = "";
+    $scope.characterStats = refreshCharacterData();
+    $scope.showSpinner = true;
+
+    refreshXPBar();
 
     ////////////////
     ///EVENTS///////
     ////////////////
-    function answerClicked(event) {
+    $scope.answerClicked = function(event) {
        var answer = "";
        if (event.target.id === "answerA") {
           getAnswer( episode, "A" );
@@ -45,14 +50,8 @@ module.controller('StoryController', ['$scope', '$state', function ($scope, $sta
     ///STATE CHANGE///
     /////////////////
     function indexStoryState() {
-       $(titleHead).empty();
-       $($scope.contentDiv).empty();
 
-       $("#content_spinner").show();
 
-       removeEvent( $scope.contentDiv.parentNode, "click", nextStoryLoad );
-       addEvent(document.getElementById("answer_row"), "click", answerClicked);
-       removeAnswerButtonsAttribute("disabled");
        refreshCharacterData();
     }
 
@@ -63,18 +62,18 @@ module.controller('StoryController', ['$scope', '$state', function ($scope, $sta
        refreshCharacterData();
     }
 
-    function indexNewGameState() {
-       nextStoryLoad();
-    }
-
     function refreshCharacterData() {
-       characterStatDiv.textContent = "Attack power: " + character.attackPower + "\n" +
+       var characterText = "Attack power: " + character.attackPower + "\n" +
                         "Defense power: " + character.defensePower + "\n" +
                         "Health point: " + character.healthPoint + " / " + character.maxHP + "\n" +
                         "Level: " + character.level + "\n";
-       var newVal = Math.round( character.experience * 100 / character.nextLevelXP() );
-       $("#xp_progress_bar").width( newVal + "%" )
-                .attr( 'aria-valuenow', newVal );
+       return characterText
+    }
+
+    function refreshXPBar() {
+        var newVal = Math.round( character.experience * 100 / characterUtils.nextLevelXP() );
+        $("#xp_progress_bar").width( newVal + "%" )
+                    .attr( 'aria-valuenow', newVal );
     }
 
     ///////////////////////////////////
