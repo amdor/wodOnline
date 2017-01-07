@@ -12,6 +12,7 @@ module.controller('NewGameController', ['$scope', '$state', function ($scope, $s
     });
 
     $scope.loadFirstChapter = function(){
-        $state.go('story')
+        sessionStorage.episode = 1;
+        $state.go('story', {episode: 1})
     }
 }]);

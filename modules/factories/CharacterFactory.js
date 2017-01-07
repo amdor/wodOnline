@@ -6,7 +6,10 @@
 
 var module = angular.module("storyModule");
 
-module.factory('characterUtils', [function(){
+module.factory('characterUtils', function(){
+
+    const STORAGE_KEY = "character";
+
     var character = {
         "attackPower": null,
         "defensePower": null,
@@ -77,13 +80,9 @@ module.factory('characterUtils', [function(){
         var xpGain = 0;
         //enemy is too strong
         if(actEnemy.defensePower >= character.attackPower){
-            //contentDiv.textContent = "Rhonin's opponent proved to be much more powerful than him " +
-            //        "luckily he could escape before got killed, as he realized the differences.\n"
-            //        + "He lost " + character.healthPoint / 2 + " health points.";
             character.healthPoint -= character.healthPoint/2;
         //opposit
         }else if(character.defensePower >= actEnemy.attackPower){
-            //contentDiv.textContent = "Rhonin was so much stronger, the opponent didn't cause any trouble to him.\n";
             xpGain = character.npcXpGain(actEnemy);
             contentDiv.textContent += "He gain " + xpGain + " experience";
         }
@@ -115,7 +114,7 @@ module.factory('characterUtils', [function(){
                     .html("<p>Rhonin died," +
                           "the game is lost. Upon continuing, the first episode will appear</p>");
                 modal.modal("show");
-                character = new Character();
+                Character();
                 episode = 1;
             //player survived
             }else{
@@ -132,13 +131,26 @@ module.factory('characterUtils', [function(){
      *UTILITIES
     */
 
-    function saveCharacter(storage, object) {
-        storage.setItem('character', JSON.stringify(object));
+    function saveCharacter(object, storage) {
+        if(storage == null){
+            storage = sessionStorage;
+        }
+        storage.setItem(STORAGE_KEY, JSON.stringify(object));
     }
 
     function loadCharacter(storage) {
-        character = JSON.parse(storage.getItem('character'));
+        if(storage == null){
+            storage = sessionStorage;
+        }
+        var tmp = JSON.parse(storage.getItem(STORAGE_KEY));
+        if(tmp == null) {
+            Character();
+        }
+        else {
+            character = tmp;
+        }
         return character;
+
     }
 
     /**
@@ -157,7 +169,7 @@ module.factory('characterUtils', [function(){
 
     return {
         "character" : character,
-        "newCharacter" : Character(),
+        "newCharacter" : Character,
         "fail" : fail,
         "reward" : reward,
         "fight" : fight,
@@ -165,4 +177,4 @@ module.factory('characterUtils', [function(){
         "loadCharacter" : loadCharacter,
         "nextLevelXP" : nextLevelXP
     };
-}]);
+});

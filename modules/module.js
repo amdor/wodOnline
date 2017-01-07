@@ -3,6 +3,7 @@ var module = angular.module("storyModule", ['ui.router']);
 module.directive("navbar", function(){
        return {
            restrict: 'E',
+           controller: "NavBarController",
            templateUrl: 'modules/directives/navbar/NavBarTemplate.html'
        }
 });
@@ -10,6 +11,7 @@ module.directive("navbar", function(){
 module.directive("modal", function(){
     return {
         restrict: 'E',
+//        controller: "NavBarController",
         templateUrl: 'modules/directives/modal/ModalTemplate.html'
     }
 });
@@ -18,13 +20,13 @@ module.config(function($stateProvider){
     $stateProvider
         .state('story',
         {
-            data: {
-                episode: 1
-            },
             views: {
                 'ContentView': {
                     templateUrl: 'modules/views/StoryViewTemplate.html',
-                    controller: 'StoryController'
+                    controller: 'StoryController',
+                    params: {
+                        episode: 1
+                    }
                 }
             }
         })

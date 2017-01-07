@@ -8,10 +8,12 @@
 	<script src="node_modules/angular.min.js"></script>
 	<script src="node_modules/angular-ui-router.min.js"></script>
 	<script src="modules/module.js"></script>
+	<script src="modules/factories/NotificationFactory.js"></script>
 	<script src="modules/controllers/IndexController.js" type="text/javascript"></script>
 	<script src="modules/controllers/StoryController.js"></script>
 	<script src="modules/controllers/NewGameController.js"></script>
 	<script src="modules/factories/CharacterFactory.js"></script>
+	<script src="modules/directives/navbar/NavBarController.js"></script>
 	<script src="js/utilities.js" type="text/javascript"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/icons.css" rel="stylesheet">
@@ -26,6 +28,8 @@
 		ng-controller="IndexController" ng-init="windowLoaded()">
 
 <navbar></navbar>
+
+<modal></modal>
 
 <!--margin deleted for indiegogo widget-->
 <div class="bodydiv container" id="bodydiv">

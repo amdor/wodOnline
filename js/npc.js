@@ -11,7 +11,7 @@ function windowLoaded( ) {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
             fillTable(JSON.parse( xhttp.responseText ));
         } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
-           showAlert("Request resulted in error");
+            showAlert("Request resulted in error");
         }
     };
     xhttp.open("GET", "proxy.php?npc", true);

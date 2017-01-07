@@ -1,9 +1,11 @@
 var module = angular.module("storyModule");
 
-module.controller('StoryController', ['$scope', '$state', 'characterUtils',
-                    function ($scope, $state, characterUtils){
+module.controller('StoryController', ['$scope', '$state', '$stateParams', 'characterUtils', 'notifications',
+                    function ($scope, $state, $stateParams, characterUtils, notifications){
 
-    var episode = $state.current.data.episode;
+    var showAlert = notifications.showAlert;
+
+    var episode = $stateParams.episode;
     var character = characterUtils.character;
     $scope.chapterTitle = "";
     $scope.chapterText = "";
@@ -34,16 +36,6 @@ module.controller('StoryController', ['$scope', '$state', 'characterUtils',
        indexStoryState();
        loadStory( episode );
        character.healthPoint = (character.healthPoint <= character.maxHP - 20) ? character.healthPoint + 20 : character.maxHP;
-    }
-
-    function newGameConfirmed() {
-       $(".modal #modal_confirm_button").remove();
-       $(".modal").modal("hide");
-       episode = 0;
-       character = new Character();
-       sessionStorage.clear();
-       localStorage.clear();
-       indexNewGameState();
     }
 
     ///////////////////
@@ -176,31 +168,5 @@ module.controller('StoryController', ['$scope', '$state', 'characterUtils',
 
         //next chapter
         episode = (answerResponse.next == undefined) ? episode + 1 : answerResponse.next;
-    }
-
-    ////////////////////////////////
-    ////User notifications//////////
-    ////////////////////////////////
-    function showAlert( msg ) {
-       var notificationAlert = document.createElement("DIV");
-       notificationAlert.className = "alert alert-danger fade in temp_Alert";
-       notificationAlert.role = "alert";
-       notificationAlert.innerHTML = msg;
-       $("#content_container").prepend(notificationAlert);
-       $(".temp_Alert").delay(4000).fadeOut(800, function() {
-          $(this).alert('close');
-       });
-    }
-
-    function showInfo( msg ) {
-       var infoAlert = document.createElement("DIV");
-       infoAlert.className = "alert alert-info fade in text-center";
-       infoAlert.role = "alert";
-       infoAlert.id = "temp_Info";
-       infoAlert.innerHTML = msg;
-       $("#content_container").prepend(infoAlert);
-       $("#temp_Info").delay(4000).fadeOut(800, function(){
-          $("#temp_Info").alert('close');
-       });
     }
 }]);
