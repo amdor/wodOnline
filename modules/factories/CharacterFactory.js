@@ -135,6 +135,9 @@ module.factory('characterUtils', function(){
         if(storage == null){
             storage = sessionStorage;
         }
+        if(object == null){
+            object = character;
+        }
         storage.setItem(STORAGE_KEY, JSON.stringify(object));
     }
 

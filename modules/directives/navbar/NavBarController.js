@@ -1,46 +1,40 @@
 var module = angular.module("storyModule");
 
-module.controller("NavBarController", ['$scope', '$state', 'notifications', 'characterUtils',
-                function($scope, $state, notifications, characterUtils) {
-    var showAlert = notifications.showAlert;
+module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'notifications',
+                function($scope, $state, characterUtils, notifications) {
     var showInfo = notifications.showInfo;
+    var showAlert = notifications.showAlert;
+    $scope.modalTitle = "";
+    $scope.modalBody = "";
 
+//    shows modal and resets storages if confirmed
     $scope.newGameClicked = function() {
-       var button = $("<button>",
-                      {"class": "btn btn-primary",
-                      "id": "modal_confirm_button",
-                      "text": "Confirm",
-                       "data-dismiss":"modal"} ).on("click", newGameConfirmed);
-       var modal = $(".modal");
-       modal.find( "#modal_confirm_button" ).remove();
-       modal.find(".modal-title").text("New Game");
-       modal.find(".modal-body")
-           .html("<p>By clicking on confirm " +
-                 "the game restarts, all saved data will be lost.</p>");
-       modal.find(".modal-footer")
-                .append( button );
-       modal.modal("show");
+        var body = "By clicking on confirm " +
+                    "the game restarts, ALL saved data will be LOST."
+        showConfirm("New Game", body, "Confirm", newGameConfirmed );
     }
 
+//    shows modal and loads episode if there
     $scope.loadGameClicked = function() {
-        if( typeof(Storage) !== undefined ) {
-            episode = Number(localStorage.episode);
+        var body = "By clicking on Load, the last saved state will be loaded, and current unsaved progress will be lost!";
+        showConfirm("Load game", body, "Load", function() {
+            sessionStorage.clear();
+            var episode = Number(localStorage.episode);
+            if(Number.isNaN(episode)) { //new game with no saves yet
+                showAlert("There is no saved game state yet.");
+                return;
+            }
+            sessionStorage.setItem("episode", episode);
             character = characterUtils.loadCharacter(localStorage);
-//            loadStory(episode);
+            characterUtils.saveCharacter(); //to sessionstorage by default
             $state.go('story', {episode: episode})
-//            refreshCharacterData();
-        } else {
-            showAlert("Your browser does not support Storage, sorry");
-        }
+        });
     }
 
     $scope.saveGameClicked = function(){
-        if( typeof(Storage) !== undefined ) {
-            saveCharacter(localStorage, character);
-            showInfo("Saved");
-        } else {
-            showAlert("Your browser does not support Storage, sorry");
-        }
+        characterUtils.saveCharacter(characterUtils.character, localStorage);
+        localStorage.setItem("episode": JSON.parse(sessionStorage.getItem("episode")))
+        showInfo("Saved");
     }
 
     $scope.closeModal = function() {
@@ -49,10 +43,25 @@ module.controller("NavBarController", ['$scope', '$state', 'notifications', 'cha
         $('.modal-backdrop').remove();
     }
 
+    function showConfirm(title, body, confirmButtonText, onConfirm) {
+        var button = $("<button>",
+                      {"class": "btn btn-primary",
+                      "id": "modal_confirm_button",
+                      "text": confirmButtonText,
+                       "data-dismiss":"modal"} ).on("click", onConfirm);
+        button.on("click", function() {
+            $scope.closeModal();
+        });
+        var modal = $(".modal");
+        $scope.modalTitle = title;
+        $scope.modalBody = body;
+        $(".modal #modal_confirm_button").remove(); //remove if there were same button(s)
+        modal.find(".modal-footer")
+                .append( button );
+        modal.modal("show");
+    }
 
     function newGameConfirmed() {
-       $(".modal #modal_confirm_button").remove();
-       $scope.closeModal();
        sessionStorage.clear();
        localStorage.clear();
        $state.go('story.newGame');
