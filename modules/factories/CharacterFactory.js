@@ -78,13 +78,14 @@ module.factory('characterUtils', function(){
      */
     function fight( actEnemy ) {
         var xpGain = 0;
+        var fightText = "";
         //enemy is too strong
         if(actEnemy.defensePower >= character.attackPower){
             character.healthPoint -= character.healthPoint/2;
         //opposit
         }else if(character.defensePower >= actEnemy.attackPower){
             xpGain = character.npcXpGain(actEnemy);
-            contentDiv.textContent += "He gain " + xpGain + " experience";
+            fightText += "He gain " + xpGain + " experience";
         }
 
         //others
@@ -93,17 +94,17 @@ module.factory('characterUtils', function(){
             var oppDmg = actEnemy.attackPower - character.defensePower;
             var rndPlayerDmg = Math.floor(playerDmg * ((Math.random() * 1.5) + 0.8)); //damage * [0.8..1.5]
             var rndOppDmg = Math.floor(oppDmg * ((Math.random() * 1.5) + 0.8));
-            contentDiv.textContent = "";
+            fightText = "";
             while( ( ( actEnemy.healthPoint -= rndPlayerDmg ) > 0 )
                   && ( ( character.healthPoint -= rndOppDmg ) > 0 ) ) {
                 rndPlayerDmg = Math.floor(playerDmg * ((Math.random() * 1.5) + 1));
                 rndOppDmg = Math.floor(oppDmg * ((Math.random() * 1.5) + 1));
-                contentDiv.textContent += "His opponent damaged him: -"  + rndOppDmg
+                fightText += "His opponent damaged him: -"  + rndOppDmg
                         + " health point. Remained " + character.healthPoint;
-                contentDiv.textContent += (rndOppDmg > oppDmg * 1.4) ? "\tCRITICAL HIT\n" : "\n";
-                contentDiv.textContent += "Rhonin attacked: " + rndPlayerDmg + " damages. "
+                fightText += (rndOppDmg > oppDmg * 1.4) ? "\tCRITICAL HIT\n" : "\n";
+                fightText += "Rhonin attacked: " + rndPlayerDmg + " damages. "
                         + actEnemy.healthPoint + " health remained.";
-                contentDiv.textContent += (rndPlayerDmg > playerDmg * 1.4) ? "\tCRITICAL HIT\n" : "\n";
+                fightText += (rndPlayerDmg > playerDmg * 1.4) ? "\tCRITICAL HIT\n" : "\n";
             }
             //player died
             if(character.healthPoint <= 0){
@@ -115,15 +116,15 @@ module.factory('characterUtils', function(){
                           "the game is lost. Upon continuing, the first episode will appear</p>");
                 modal.modal("show");
                 Character();
-                episode = 1;
+                sessionStorage.clear();
             //player survived
             }else{
                 xpGain = character.npcXpGain(actEnemy);
-                contentDiv.textContent += "Gained " + xpGain + " experiences";
+                fightText += "Gained " + xpGain + " experiences";
             }
 
         }
-        return xpGain;
+        return {"xpGain": xpGain, "fightText": fightText };
     }
 
 

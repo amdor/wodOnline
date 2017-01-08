@@ -39,5 +39,13 @@ module.config(function($stateProvider){
                 }
             }
         })
+        .state('story.answered',{
+            views: {
+                'ContentView@': {
+                    templateUrl: 'modules/views/AnswerViewTemplate.html',
+                    controller: 'AnswerController'
+                }
+            }
+        })
 });
 

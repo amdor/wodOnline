@@ -25,15 +25,15 @@ module.controller('StoryController', ['$scope', '$state', '$stateParams', 'chara
     $scope.answerClicked = function(event) {
        var answer = "";
        if (event.target.id === "answerA") {
-          getAnswer( episode, "A" );
+          answer = "A";
        } else if (event.target.id === "answerB") {
-          getAnswer( episode, "B" );
+          answer = "B";
        }  else if (event.target.id === "answerC") {
-          getAnswer( episode, "C" );
+          answer = "C";
        }  else if (event.target.id === "answerD") {
-          getAnswer( episode, "D" );
+          answer = "D";
        }
-       indexAnsweredState();
+       $state.go("story.answered", {"episode": episode, "answer": answer });
 
     }
 
@@ -93,10 +93,9 @@ module.controller('StoryController', ['$scope', '$state', '$stateParams', 'chara
     ///////////////////////////////////
     ////Server communications//////////
     ///////////////////////////////////
-    //TODO:these need enhancements :(
     function loadStory( ep ) {
-        $.get("proxy.php", {"story": ep}, function(data, statusText, xhr){
-            var response = JSON.parse( xhr.responseText );
+        $.get("proxy.php", {"story": ep}, function(data){
+            var response = JSON.parse( data );
             $scope.$apply(function() {
                 $scope.chapterTitle = response.Title;
                 $scope.chapterText = response.Content;
@@ -105,7 +104,7 @@ module.controller('StoryController', ['$scope', '$state', '$stateParams', 'chara
                 }
             });
         })
-        .fail(function(xhr){
+        .fail(function(){
             $scope.$apply(function() {
                 showAlert("Request resulted in error");
             });
@@ -115,63 +114,5 @@ module.controller('StoryController', ['$scope', '$state', '$stateParams', 'chara
                 $scope.showSpinner = false;
             });
         });
-    }
-
-
-    /**
-     * Gets the corresponding answer's results from the database
-     */
-    function getAnswer( ep, answer ) {
-       var xhttp = new XMLHttpRequest();
-       xhttp.onreadystatechange = function() {
-          if (xhttp.readyState == 4 && xhttp.status == 200) {
-             handleAnswerResponse( JSON.parse( xhttp.responseText ) );
-          } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
-             showAlert("Request resulted in error");
-          }
-       };
-       xhttp.open("GET", "proxy.php?answer=" + ep + "&answerLetter=" + answer, true);
-       xhttp.send();
-    }
-
-    function handleAnswerResponse( answerResponse ) {
-       var xpGain = 0;
-       answerResponse.storyText += "\n";
-       if ( answerResponse.outcome === "fail" ) {
-          xpGain = character.fail();
-          $scope.contentDiv.textContent = answerResponse.storyText;
-          $scope.contentDiv.textContent += "Hasn't saved the world today. \n Gained " +
-                         xpGain + " experience";
-        } else if ( answerResponse.outcome === "reward" ) {
-          xpGain = character.reward();
-          $scope.contentDiv.textContent = answerResponse.storyText;
-          $scope.contentDiv.textContent += "The well-deserved reward is " +
-                         xpGain + " experience";
-        } else {
-          var xhttp = new XMLHttpRequest();
-          xhttp.onreadystatechange = function() {
-             if (xhttp.readyState == 4 && xhttp.status == 200) {
-                var npc = JSON.parse( xhttp.responseText );
-                xpGain = character.fight( npc );
-                if (xpGain > 0) {
-                   $scope.contentDiv.textContent = answerResponse.storyText;
-                   $scope.contentDiv.textContent += "The well-deserved reward is " +
-                         xpGain + " experience";
-                } else if ( episode > 1 ) { //greater than 1 === lost but alive, cos resets on death
-                   $scope.contentDiv.textContent = "Rhonin's opponent proved to be much more powerful than him " +
-                       "luckily he could escape before got killed, as he realized the differences.\n"
-                       + "He lost " + this.healthPoint + " health points.";
-                }
-             } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
-                showAlert("Request resulted in error");
-             }
-          };
-          xhttp.open("GET", "proxy.php?npc=" + answerResponse.outcome, true);
-          xhttp.send();
-
-        }
-
-        //next chapter
-        episode = (answerResponse.next == undefined) ? episode + 1 : answerResponse.next;
     }
 }]);

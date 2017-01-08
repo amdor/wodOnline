@@ -33,7 +33,7 @@ module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'no
 
     $scope.saveGameClicked = function(){
         characterUtils.saveCharacter(characterUtils.character, localStorage);
-        localStorage.setItem("episode", JSON.parse(sessionStorage.getItem("episode")))
+        localStorage.setItem("episode", sessionStorage.getItem("episode"))
         showInfo("Saved");
     }
 
