@@ -38,7 +38,7 @@ module.factory('characterUtils', function(){
         character.level++;
     }
 
-    function xpToLevelUp() {
+    function levelUpIfNeeded() {
         if( ( character.experience - nextLevelXP() ) >= 0 ){
             character.experience -= nextLevelXP();
             character.levelUp();
@@ -48,14 +48,14 @@ module.factory('characterUtils', function(){
     function fail() {
         var gain = character.level + 5;
         character.experience += gain;
-        character.xpToLevelUp();
+        levelUpIfNeeded();
         return gain;
     }
 
     function reward() {
         var gain = ( character.level * 4 ) + 45;
         character.experience += gain;
-        character.xpToLevelUp();
+        levelUpIfNeeded();
         return gain;
     }
 
@@ -63,11 +63,11 @@ module.factory('characterUtils', function(){
         var base = character.level * 5 + 45;
         if( character.level >= actEnemy.level ){
             character.experience += base;
-            character.xpToLevelUp();
+            levelUpIfNeeded();
             return base;
         } else {
             character.experience += base * (actEnemy.level - character.level);
-            character.xpToLevelUp();
+            levelUpIfNeeded();
             return base * (actEnemy.level - character.level);
         }
     }
