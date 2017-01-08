@@ -103,13 +103,17 @@ module.controller('StoryController', ['$scope', '$state', '$stateParams', 'chara
                 for(var i = 0; i < response.Answers.length; i++) {
                     $scope.chapterText += '\r\n\r\n'+response.Answers[i].text;
                 }
-            }
+            });
         })
         .fail(function(xhr){
-            showAlert("Request resulted in error");
+            $scope.$apply(function() {
+                showAlert("Request resulted in error");
+            });
         })
         .always(function() {
-            $scope.showSpinner = false;
+            $scope.$apply(function() {
+                $scope.showSpinner = false;
+            });
         });
     }
 
