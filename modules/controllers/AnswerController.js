@@ -27,7 +27,7 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
         var answerResponse = JSON.parse(data);
         answerResponse.storyText += "\n";
         //next chapter
-        var episode = (answerResponse.next == undefined) ? episode + 1 : answerResponse.next;
+        episode = (answerResponse.next == undefined) ? episode + 1 : answerResponse.next;
         sessionStorage.setItem("episode", episode);
 
         if ( answerResponse.outcome === "fail" ) {
