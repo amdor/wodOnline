@@ -47,7 +47,7 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
         } else {
             $.get("proxy.php", {"npc": answerResponse.outcome},
             function() {
-                $scope.apply(function(){
+                $scope.$apply(function(){
                     var npc = JSON.parse( xhttp.responseText );
                     var outcome = characterUtils.fight( npc );
                     xpGain = outcome.xpGain;
@@ -64,7 +64,7 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
                 });
             })
             .fail(function() {
-                $scope.apply(function(){
+                $scope.$apply(function(){
                     showAlert("Request resulted in error");
                 });
             });
