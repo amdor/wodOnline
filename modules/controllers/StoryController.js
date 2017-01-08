@@ -97,13 +97,10 @@ module.controller('StoryController', ['$scope', '$state', '$stateParams', 'chara
     function loadStory( ep ) {
         $.get("proxy.php", {"story": ep}, function(data, statusText, xhr){
             var response = JSON.parse( xhr.responseText );
-            titleHead.textContent = response.Title;
-            $scope.contentDiv.textContent = response.Content;
-            setAnswerButtonsAttribute("disabled", "disabled");
-            $("#answer_row").children()
-                        .slice(0, response.Answers.length).children().removeAttr("disabled");
+            $scope.chapterTitle = response.Title;
+            $scope.chapterText = response.Content;
             for(var i = 0; i < response.Answers.length; i++) {
-                $scope.contentDiv.textContent += '\r\n\r\n'+response.Answers[i].text;
+                $scope.chapterText += '\r\n\r\n'+response.Answers[i].text;
             }
         })
         .fail(function(xhr){
