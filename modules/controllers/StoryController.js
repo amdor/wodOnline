@@ -5,8 +5,8 @@ module.controller('StoryController', ['$scope', '$state', '$stateParams', 'chara
 
     var showAlert = notifications.showAlert;
 
-    var episode = $stateParams.episode;
-    var character = characterUtils.character;
+    var episode = $stateParams.episode ? $stateParams.episode : Number(JSON.parse(sessionStorage.getItem("episode")));
+    var character = characterUtils.loadCharacter();
     $scope.chapterTitle = "";
     $scope.chapterText = "";
     $scope.characterStats = "";
