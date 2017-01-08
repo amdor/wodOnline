@@ -43,7 +43,11 @@ module.config(function($stateProvider){
             views: {
                 'ContentView@': {
                     templateUrl: 'modules/views/AnswerViewTemplate.html',
-                    controller: 'AnswerController'
+                    controller: 'AnswerController',
+                    params: {
+                        episode: 1,
+                        answer: ""
+                    }
                 }
             }
         })
