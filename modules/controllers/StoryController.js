@@ -95,23 +95,19 @@ module.controller('StoryController', ['$scope', '$state', '$stateParams', 'chara
     ///////////////////////////////////
     //TODO:these need enhancements :(
     function loadStory( ep ) {
-        $.get("proxy.php", {"story": ep}, function(data, xhr){
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                var response = JSON.parse( xhr.responseText );
-                titleHead.textContent = response.Title;
-                $scope.contentDiv.textContent = response.Content;
-                setAnswerButtonsAttribute("disabled", "disabled");
-                $("#answer_row").children()
-                            .slice(0, response.Answers.length).children().removeAttr("disabled");
-                for(var i = 0; i < response.Answers.length; i++) {
-                    $scope.contentDiv.textContent += '\r\n\r\n'+response.Answers[i].text;
-                }
+        $.get("proxy.php", {"story": ep}, function(data, statusText, xhr){
+            var response = JSON.parse( xhr.responseText );
+            titleHead.textContent = response.Title;
+            $scope.contentDiv.textContent = response.Content;
+            setAnswerButtonsAttribute("disabled", "disabled");
+            $("#answer_row").children()
+                        .slice(0, response.Answers.length).children().removeAttr("disabled");
+            for(var i = 0; i < response.Answers.length; i++) {
+                $scope.contentDiv.textContent += '\r\n\r\n'+response.Answers[i].text;
             }
         })
         .fail(function(xhr){
-            if (xhr.readyState == 4 && xhr.status >= 400) {
-                showAlert("Request resulted in error");
-            }
+            showAlert("Request resulted in error");
         })
         .always(function() {
             $scope.showSpinner = false;
