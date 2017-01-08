@@ -97,10 +97,12 @@ module.controller('StoryController', ['$scope', '$state', '$stateParams', 'chara
     function loadStory( ep ) {
         $.get("proxy.php", {"story": ep}, function(data, statusText, xhr){
             var response = JSON.parse( xhr.responseText );
-            $scope.chapterTitle = response.Title;
-            $scope.chapterText = response.Content;
-            for(var i = 0; i < response.Answers.length; i++) {
-                $scope.chapterText += '\r\n\r\n'+response.Answers[i].text;
+            $scope.$apply(function() {
+                $scope.chapterTitle = response.Title;
+                $scope.chapterText = response.Content;
+                for(var i = 0; i < response.Answers.length; i++) {
+                    $scope.chapterText += '\r\n\r\n'+response.Answers[i].text;
+                }
             }
         })
         .fail(function(xhr){
