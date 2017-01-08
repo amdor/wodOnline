@@ -33,7 +33,7 @@ module.controller('StoryController', ['$scope', '$state', '$stateParams', 'chara
        }  else if (event.target.id === "answerD") {
           answer = "D";
        }
-       $state.go("story.answered", {"episode": episode, "answer": answer });
+       $state.go("story.answered", {episode: episode, answer: answer });
 
     }
 
