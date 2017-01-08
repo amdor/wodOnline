@@ -3,7 +3,7 @@ var module = angular.module("storyModule");
 module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'characterUtils', 'notifications',
                     function ($scope, $state, $stateParams, characterUtils, notifications){
 
-    var episode = $stateParams.episode ? $stateParams.episode : Number(JSON.parse(sessionStorage.getItem("episode")));
+    var episode = ($stateParams.episode != undefined) ? $stateParams.episode : Number(sessionStorage.getItem("episode"));
     var answer = $stateParams.answer;
     var showAlert = notifications.showAlert;
     $scope.answerText = "";
