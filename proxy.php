@@ -43,6 +43,7 @@ function getNPC( $enemy, $manager ) {
 ///////////
 file_put_contents("logs.log", "");
 try{
+    logToFile( "Trying to create manager.");
     $manager = new MongoDB\Driver\Manager( "mongodb://wodonline:Wod0nlin3@ds013559.mlab.com:13559/heroku_6czfjjnr" );
     logToFile( "Manager created ");
     if( checkEpisode($_GET["answer"]) ) {

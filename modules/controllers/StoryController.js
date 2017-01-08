@@ -9,10 +9,15 @@ module.controller('StoryController', ['$scope', '$state', '$stateParams', 'chara
     var character = characterUtils.character;
     $scope.chapterTitle = "";
     $scope.chapterText = "";
-    $scope.characterStats = refreshCharacterData();
+    $scope.characterStats = "";
     $scope.showSpinner = true;
 
-    refreshXPBar();
+
+    $scope.$on('$viewContentLoaded', function(event){
+        $scope.characterStats = refreshCharacterData();
+        refreshXPBar();
+        loadStory(episode);
+    });
 
     ////////////////
     ///EVENTS///////
@@ -88,28 +93,29 @@ module.controller('StoryController', ['$scope', '$state', '$stateParams', 'chara
     ///////////////////////////////////
     ////Server communications//////////
     ///////////////////////////////////
+    //TODO:these need enhancements :(
     function loadStory( ep ) {
-       var xhttp = new XMLHttpRequest();
-       xhttp.onreadystatechange = function() {
-          if (xhttp.readyState == 4 && xhttp.status == 200) {
-             var response = JSON.parse( xhttp.responseText );
-             titleHead.textContent = response.Title;
-             $scope.contentDiv.textContent = response.Content;
-             setAnswerButtonsAttribute("disabled", "disabled");
-             $("#answer_row").children()
+        $.get("proxy.php", {"story": ep}, function(data, xhr){
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var response = JSON.parse( xhr.responseText );
+                titleHead.textContent = response.Title;
+                $scope.contentDiv.textContent = response.Content;
+                setAnswerButtonsAttribute("disabled", "disabled");
+                $("#answer_row").children()
                             .slice(0, response.Answers.length).children().removeAttr("disabled");
-             for(var i = 0; i < response.Answers.length; i++) {
-                $scope.contentDiv.textContent += '\r\n\r\n'+response.Answers[i].text;
-             }
-          } else if (xhttp.readyState == 4 && xhttp.status >= 400) {
-             showAlert("Request resulted in error");
-          }
-          if (xhttp.readyState == 4 ) {
-             $("#content_spinner").hide();
-          }
-       };
-       xhttp.open("GET", "proxy.php?story=" + ep, true);
-       xhttp.send();
+                for(var i = 0; i < response.Answers.length; i++) {
+                    $scope.contentDiv.textContent += '\r\n\r\n'+response.Answers[i].text;
+                }
+            }
+        })
+        .fail(function(xhr){
+            if (xhr.readyState == 4 && xhr.status >= 400) {
+                showAlert("Request resulted in error");
+            }
+        })
+        .always(function() {
+            $scope.showSpinner = false;
+        });
     }
 
 

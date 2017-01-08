@@ -14,10 +14,7 @@ module.controller("IndexController", ['$scope', '$state', 'characterUtils',
 
         //loading data, and showing it
         episode = (typeof(Storage) !== undefined) ? ((sessionStorage.episode > 0) ? Number(sessionStorage.episode) : 0) : 0;
-        character =  characterUtils.loadCharacter();/*(typeof(Storage) !== undefined) ?
-                         (sessionStorage.character !== undefined) ?
-                            characterUtils.loadCharacter(sessionStorage) : characterUtils.newCharacter()
-                         : characterUtils.newCharacter();*/
+        character =  characterUtils.loadCharacter();
         if (episode > 0) {
             $state.go('story', {episode: episode});
         } else {
