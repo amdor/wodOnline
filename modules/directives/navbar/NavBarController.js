@@ -18,12 +18,12 @@ module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'no
     $scope.loadGameClicked = function() {
         var body = "By clicking on Load, the last saved state will be loaded, and current unsaved progress will be lost!";
         showConfirm("Load game", body, "Load", function() {
-            sessionStorage.clear();
             var episode = Number(localStorage.episode);
             if(Number.isNaN(episode)) { //new game with no saves yet
                 showAlert("There is no saved game state yet.");
                 return;
             }
+            sessionStorage.clear();
             sessionStorage.setItem("episode", episode);
             character = characterUtils.loadCharacter(localStorage);
             characterUtils.saveCharacter(); //to sessionstorage by default
