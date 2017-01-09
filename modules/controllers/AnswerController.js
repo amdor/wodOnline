@@ -46,9 +46,9 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
           });
         } else {
             $.get("proxy.php", {"npc": answerResponse.outcome},
-            function() {
+            function(data) {
                 $scope.$apply(function(){
-                    var npc = JSON.parse( xhttp.responseText );
+                    var npc = JSON.parse( data );
                     var outcome = characterUtils.fight( npc );
                     xpGain = outcome.xpGain;
                     if (xpGain > 0) {

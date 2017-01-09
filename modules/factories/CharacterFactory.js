@@ -45,31 +45,21 @@ module.factory('characterUtils', function(){
         }
     }
 
+
+    /**
+    *   ACTIONS
+    */
+
     function fail() {
         var gain = character.level + 5;
-        character.experience += gain;
-        levelUpIfNeeded();
+        finalizeAction(gain);
         return gain;
     }
 
     function reward() {
         var gain = ( character.level * 4 ) + 45;
-        character.experience += gain;
-        levelUpIfNeeded();
+        finalizeAction(gain);
         return gain;
-    }
-
-    function npcXpGain( actEnemy ){
-        var base = character.level * 5 + 45;
-        if( character.level >= actEnemy.level ){
-            character.experience += base;
-            levelUpIfNeeded();
-            return base;
-        } else {
-            character.experience += base * (actEnemy.level - character.level);
-            levelUpIfNeeded();
-            return base * (actEnemy.level - character.level);
-        }
     }
 
     /**
@@ -87,7 +77,6 @@ module.factory('characterUtils', function(){
             xpGain = character.npcXpGain(actEnemy);
             fightText += "He gain " + xpGain + " experience";
         }
-
         //others
         else {
             var playerDmg = character.attackPower - actEnemy.defensePower;
@@ -124,6 +113,7 @@ module.factory('characterUtils', function(){
             }
 
         }
+        finalizeAction(gain);
         return {"xpGain": xpGain, "fightText": fightText };
     }
 
@@ -169,6 +159,21 @@ module.factory('characterUtils', function(){
                         + ( 40 * character.level * character.level )
                         + ( 396 * character.level );
         }
+    }
+
+
+    function npcXpGain( actEnemy ){
+        var gain = character.level * 5 + 45;
+        if( character.level < actEnemy.level ){
+            gain = gain * (actEnemy.level - character.level);
+        }
+        return gain;
+    }
+
+    function finalizeAction(xpGain) {
+        character.experience += gain;
+        levelUpIfNeeded();
+        saveCharacter();
     }
 
     return {
