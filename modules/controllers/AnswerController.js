@@ -66,7 +66,7 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
                            + "He lost " + characterUtils.character.healthPoint + " health points.";
                     } else {
                         //showing a die modal
-                        var body = "<pre>" + fightText + "</pre>" + "<p><b>Rhonin died, " +
+                        var body = "<pre>" + outcome.fightText + "</pre>" + "<p><b>Rhonin died, " +
                                                  "the game is lost. Upon continuing, the first episode will appear</p><b>"
                         showConfirm("Game Over", body, "Confirm", function() {
                             sessionStorage.setItem("episode", 0);
