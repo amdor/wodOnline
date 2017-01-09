@@ -41,7 +41,7 @@ module.factory('characterUtils', function(){
     function levelUpIfNeeded() {
         if( ( character.experience - nextLevelXP() ) >= 0 ){
             character.experience -= nextLevelXP();
-            character.levelUp();
+            levelUp();
         }
     }
 
@@ -74,7 +74,7 @@ module.factory('characterUtils', function(){
             character.healthPoint -= character.healthPoint/2;
         //opposit
         }else if(character.defensePower >= actEnemy.attackPower){
-            xpGain = character.npcXpGain(actEnemy);
+            xpGain = npcXpGain(actEnemy);
             fightText += "He gain " + xpGain + " experience";
         }
         //others
@@ -108,7 +108,7 @@ module.factory('characterUtils', function(){
                 sessionStorage.clear();
             //player survived
             }else{
-                xpGain = character.npcXpGain(actEnemy);
+                xpGain = npcXpGain(actEnemy);
                 fightText += "Gained " + xpGain + " experiences";
             }
 
