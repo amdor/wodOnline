@@ -12,6 +12,10 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
         getAnswer();
     });
 
+    $scope.loadNextStory = function(){
+        $state.go('story', {episode: episode});
+    }
+
     /**
      * Gets the corresponding answer's results from the database
      */

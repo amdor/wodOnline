@@ -101,7 +101,7 @@ module.factory('characterUtils', function(){
                 var modal = $(".modal");
                 modal.find(".modal-title").text("Game Over");
                 modal.find(".modal-body")
-                    .html("<p>Rhonin died," +
+                    .html("<p>Rhonin died, " +
                           "the game is lost. Upon continuing, the first episode will appear</p>");
                 modal.modal("show");
                 Character();
@@ -113,7 +113,7 @@ module.factory('characterUtils', function(){
             }
 
         }
-        finalizeAction(gain);
+        finalizeAction(xpGain);
         return {"xpGain": xpGain, "fightText": fightText };
     }
 
