@@ -68,7 +68,7 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
                         //showing a die modal
                         var body = "<pre>" + outcome.fightText + "</pre>" + "<p><b>Rhonin died, " +
                                                  "the game is lost. Upon continuing, the first episode will appear</p><b>"
-                        showConfirm("Game Over", body, "Confirm", function() {
+                        notifications.showConfirm("Game Over", body, "Confirm", function() {
                             sessionStorage.setItem("episode", 0);
                             $state.go("story.newGame");
                         });
