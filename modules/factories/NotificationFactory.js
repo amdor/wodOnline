@@ -14,6 +14,10 @@ module.factory('notifications', function(){
         ALERT: "alert-danger"
     };
 
+//////////////////////
+//////API/////////////
+//////////////////////
+
     function showAlert( msg ) {
         show(msg, MessageLevel.ALERT);
     }
@@ -21,6 +25,35 @@ module.factory('notifications', function(){
     function showInfo( msg ) {
        show(msg, MessageLevel.INFO);
     }
+
+    function closeModal() {
+        $('.modal').modal('hide');
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+    }
+
+    function showConfirm(title, body, confirmButtonText, onConfirm) {
+        var button = $("<button>",
+                      {"class": "btn btn-primary",
+                      "id": "modal_confirm_button",
+                      "text": confirmButtonText,
+                       "data-dismiss":"modal"} ).on("click", onConfirm);
+        button.on("click", function() {
+            closeModal();
+        });
+        var modal = $(".modal");
+        $("#modalTitle").text(title);
+        $("#modalBody").text(body);
+        $(".modal #modal_confirm_button").remove(); //remove if there were same button(s)
+        modal.find(".modal-footer")
+                .append( button );
+        modal.modal("show");
+    }
+
+
+//////////////////////
+///////HELPERS////////
+//////////////////////
 
     function show( msg, level) {
         var alert = $("<div></div>",{
@@ -37,7 +70,9 @@ module.factory('notifications', function(){
 
     return {
         "showInfo": showInfo,
-        "showAlert": showAlert
+        "showAlert": showAlert,
+        "closeModal": closeModal,
+        "showConfirm": showConfirm
     };
 
 });

@@ -4,8 +4,10 @@ module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'no
                 function($scope, $state, characterUtils, notifications) {
     var showInfo = notifications.showInfo;
     var showAlert = notifications.showAlert;
+    var showConfirm = notifications.showConfirm;
     $scope.modalTitle = "";
     $scope.modalBody = "";
+    $scope.closeModal = notifications.closeModal;
 
 //    shows modal and resets storages if confirmed
     $scope.newGameClicked = function() {
@@ -35,30 +37,6 @@ module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'no
         characterUtils.saveCharacter(characterUtils.character, localStorage);
         localStorage.setItem("episode", sessionStorage.getItem("episode"))
         showInfo("Saved");
-    }
-
-    $scope.closeModal = function() {
-        $('.modal').modal('hide');
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
-    }
-
-    function showConfirm(title, body, confirmButtonText, onConfirm) {
-        var button = $("<button>",
-                      {"class": "btn btn-primary",
-                      "id": "modal_confirm_button",
-                      "text": confirmButtonText,
-                       "data-dismiss":"modal"} ).on("click", onConfirm);
-        button.on("click", function() {
-            $scope.closeModal();
-        });
-        var modal = $(".modal");
-        $scope.modalTitle = title;
-        $scope.modalBody = body;
-        $(".modal #modal_confirm_button").remove(); //remove if there were same button(s)
-        modal.find(".modal-footer")
-                .append( button );
-        modal.modal("show");
     }
 
     function newGameConfirmed() {

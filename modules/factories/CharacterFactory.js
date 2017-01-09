@@ -6,7 +6,7 @@
 
 var module = angular.module("storyModule");
 
-module.factory('characterUtils', function(){
+module.factory('characterUtils', ['notifications', function(){
 
     const STORAGE_KEY = "character";
 
@@ -96,15 +96,7 @@ module.factory('characterUtils', function(){
             }
             //player died
             if(character.healthPoint <= 0){
-                //showing a die modal
-                var modal = $(".modal");
-                modal.find(".modal-title").text("Game Over");
-                modal.find(".modal-body")
-                    .html(fightText + "<p><b>Rhonin died, " +
-                          "the game is lost. Upon continuing, the first episode will appear</p><b>");
-                modal.modal("show");
                 Character();
-                sessionStorage.clear();
             //player survived
             }else{
                 xpGain = npcXpGain(actEnemy);
@@ -184,4 +176,4 @@ module.factory('characterUtils', function(){
         "loadCharacter" : loadCharacter,
         "nextLevelXP" : nextLevelXP
     };
-});
+}]);

@@ -60,10 +60,18 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
                        $scope.answerText += answerResponse.storyText;
                        $scope.answerText += "The well-deserved reward is " +
                              xpGain + " experience";
-                    } else if ( 1 < Number(sessionStorage.getItem("episode")) ) { //greater than 1 === lost but alive, cos resets on death
-                       $scope.answerText = "Rhonin's opponent proved to be much more powerful than him " +
-                           "luckily he could escape before got killed, as he realized the differences.\n"
-                           + "He lost " + this.healthPoint + " health points.";
+                    } else if ( characterUtils.character.experience > 0 ) { //alive
+                       $scope.answerText = "Rhonin's opponent proved to be much more powerful than he was. " +
+                           "Luckily he could escape before got killed, as he realized the differences.\n"
+                           + "He lost " + characterUtils.character.healthPoint + " health points.";
+                    } else {
+                        //showing a die modal
+                        var body = "<pre>" + fightText + "</pre>" + "<p><b>Rhonin died, " +
+                                                 "the game is lost. Upon continuing, the first episode will appear</p><b>"
+                        showConfirm("Game Over", body, "Confirm", function() {
+                            sessionStorage.setItem("episode", 0);
+                            $state.go("story.newGame");
+                        });
                     }
                 });
             })
