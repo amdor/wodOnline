@@ -75,7 +75,6 @@ module.factory('characterUtils', function(){
         //opposit
         }else if(character.defensePower >= actEnemy.attackPower){
             xpGain = npcXpGain(actEnemy);
-            fightText += "He gain " + xpGain + " experience";
         }
         //others
         else {
@@ -101,15 +100,14 @@ module.factory('characterUtils', function(){
                 var modal = $(".modal");
                 modal.find(".modal-title").text("Game Over");
                 modal.find(".modal-body")
-                    .html("<p>Rhonin died, " +
-                          "the game is lost. Upon continuing, the first episode will appear</p>");
+                    .html(fightText + "<p><b>Rhonin died, " +
+                          "the game is lost. Upon continuing, the first episode will appear</p><b>");
                 modal.modal("show");
                 Character();
                 sessionStorage.clear();
             //player survived
             }else{
                 xpGain = npcXpGain(actEnemy);
-                fightText += "Gained " + xpGain + " experiences";
             }
 
         }
