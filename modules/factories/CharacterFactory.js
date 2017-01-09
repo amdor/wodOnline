@@ -171,7 +171,7 @@ module.factory('characterUtils', function(){
     }
 
     function finalizeAction(xpGain) {
-        character.experience += gain;
+        character.experience += xpGain;
         levelUpIfNeeded();
         saveCharacter();
     }
