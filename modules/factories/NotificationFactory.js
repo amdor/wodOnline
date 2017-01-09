@@ -42,8 +42,8 @@ module.factory('notifications', function(){
             closeModal();
         });
         var modal = $(".modal");
-        $("#modalTitle").text(title);
-        $("#modalBody").text(body);
+        $("#modalTitle").html(title);
+        $("#modalBody").html(body);
         $(".modal #modal_confirm_button").remove(); //remove if there were same button(s)
         modal.find(".modal-footer")
                 .append( button );
