@@ -1,1 +1,1 @@
-web:    java -jar target/wodonline.jar
+web:    java -jar target/wodonline-0.0.1-SNAPSHOT.jar
