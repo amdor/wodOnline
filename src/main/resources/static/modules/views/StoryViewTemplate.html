@@ -22,17 +22,12 @@
 </div>
 <div class="container-fluid" id="answer_container" style="margin-top: 10px">
     <div class="row" id="answer_row" ng-click="answerClicked($event);">
-        <div class="col-xs-4 col-sm-4 col-md-1 col-xs-offset-4 col-sm-offset-4 col-md-offset-1">
-            <button class="btn btn-default btn-block" type="button" id="answerA">A</button>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-1 col-xs-offset-4 col-sm-offset-4 col-md-offset-2">
-            <button class="btn btn-default btn-block" type="button" id="answerB">B</button>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-1 col-xs-offset-4 col-sm-offset-4 col-md-offset-2">
-            <button class="btn btn-default btn-block" type="button" id="answerC">C</button>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-1 col-xs-offset-4 col-sm-offset-4 col-md-offset-2">
-            <button class="btn btn-default btn-block" type="button" id="answerD">D</button>
+        <div class="col-xs-4 col-sm-4 col-md-1 col-xs-offset-4 col-sm-offset-4 col-md-offset-1"
+             ng-repeat="i in range(numberOfAnswers) track by $index">
+            <button class="btn btn-default btn-block" type="button"
+                    id="answer{{answerLetters[$index]}}">
+                {{answerLetters[$index]}}
+            </button>
         </div>
     </div>
 </div>

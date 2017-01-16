@@ -12,6 +12,8 @@ module.controller('StoryController', ['$scope', '$state', 'characterUtils', 'not
     $scope.chapterText = "";
     $scope.characterStats = "";
     $scope.showSpinner = true;
+    $scope.numberOfAnswers = 0;
+    $scope.answerLetters = ['A', 'B', 'C', 'D'];
 
 
     $scope.$on('$viewContentLoaded', function(event){
@@ -19,6 +21,10 @@ module.controller('StoryController', ['$scope', '$state', 'characterUtils', 'not
         refreshXPBar();
         loadStory(episode);
     });
+
+    $scope.range = function(n) {
+        return new Array(n);
+    };
 
     ////////////////
     ///EVENTS///////
@@ -64,6 +70,7 @@ module.controller('StoryController', ['$scope', '$state', 'characterUtils', 'not
             $scope.$apply(function() {
                 $scope.chapterTitle = response.title;
                 $scope.chapterText = response.content;
+                $scope.numberOfAnswers = response.answers.length;
                 for(var i = 0; i < response.answers.length; i++) {
                     $scope.chapterText += '\r\n\r\n'+response.answers[i].text;
                 }
