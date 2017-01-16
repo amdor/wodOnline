@@ -25,14 +25,6 @@ public class Story {
     @Field("Content")
     private String content;
 
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
-
     @Field("Answers")
     private List<Answer> answers;
 
@@ -68,6 +60,15 @@ public class Story {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 
     @Override

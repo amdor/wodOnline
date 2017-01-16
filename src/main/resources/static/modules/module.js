@@ -23,10 +23,7 @@ module.config(function($stateProvider){
             views: {
                 'ContentView': {
                     templateUrl: 'modules/views/StoryViewTemplate.html',
-                    controller: 'StoryController',
-                    params: {
-                        episode: 1
-                    }
+                    controller: 'StoryController'
                 }
             }
         })
@@ -47,7 +44,6 @@ module.config(function($stateProvider){
                 }
             },
             params: {
-                episode: 1,
                 answer: null
             }
         })

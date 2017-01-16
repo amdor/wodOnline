@@ -78,4 +78,16 @@ public class Npc {
     public void setLevel(int level) {
         this.level = level;
     }
+
+    @Override
+    public String toString() {
+        return "Npc{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", attackPower=" + attackPower +
+                ", defensePower=" + defensePower +
+                ", healthPoint=" + healthPoint +
+                ", level=" + level +
+                '}';
+    }
 }

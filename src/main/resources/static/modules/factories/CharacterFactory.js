@@ -16,7 +16,8 @@ module.factory('characterUtils', ['notifications', function(){
         "healthPoint": null,
         "maxHP": null,
         "experience": null,
-        "level": null
+        "level": null,
+        "episode": null
     };
 
     function Character() {
@@ -26,6 +27,7 @@ module.factory('characterUtils', ['notifications', function(){
         character.maxHP = character.healthPoint;
         character.experience = 0;
         character.level = 1;
+        character.episode = 1;
         return character;
     }
 

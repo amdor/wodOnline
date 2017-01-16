@@ -43,6 +43,10 @@ module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'no
         $state.go("npc");
     }
 
+    $scope.storyState = function() {
+        $state.go("story");
+    }
+
     $scope.toggleNav = function() {
        var navbarControl = $('.navbar-toggle');
        if ( navbarControl.attr("aria-expanded") === 'true' ) {

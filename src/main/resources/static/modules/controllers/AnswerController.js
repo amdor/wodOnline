@@ -3,7 +3,7 @@ var module = angular.module("storyModule");
 module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'characterUtils', 'notifications',
                     function ($scope, $state, $stateParams, characterUtils, notifications){
 
-    var episode = ($stateParams.episode != undefined) ? $stateParams.episode : Number(sessionStorage.getItem("episode"));
+    var episode = characterUtils.loadCharacter().episode;
     var answer = $stateParams.answer;
     var showAlert = notifications.showAlert;
     $scope.answerText = "";
@@ -13,7 +13,7 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
     });
 
     $scope.loadNextStory = function(){
-        $state.go('story', {episode: episode});
+        $state.go('story');
     }
 
     /**
@@ -31,8 +31,10 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
         var answerResponse = data;
         answerResponse.storyText += "\n";
         //next chapter
+        var character = characterUtils.loadCharacter();
         episode = (answerResponse.next == 0) ? episode + 1 : answerResponse.next;
-        sessionStorage.setItem("episode", episode);
+        character.episode = episode;
+        characterUtils.saveCharacter(character);
 
         if ( answerResponse.outcome === "fail" ) {
           xpGain = characterUtils.fail();
@@ -69,7 +71,6 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
                         var body = "<pre>" + outcome.fightText + "</pre>" + "<p><b>Rhonin died, " +
                                                  "the game is lost. Upon continuing, the first episode will appear</p><b>"
                         notifications.showConfirm("Game Over", body, "Confirm", function() {
-                            sessionStorage.setItem("episode", 0);
                             $state.go("story.newGame");
                         });
                     }

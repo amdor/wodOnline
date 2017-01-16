@@ -2,7 +2,8 @@ var module = angular.module("storyModule");
 
 module.controller('NewGameController', ['$scope', '$state', function ($scope, $state){
 
-    $(function(){
+     $scope.$on('$viewContentLoaded', function(event){
+        sessionStorage.clear();
         var $downloadingImage = $("<img>");
         var $image = $("#startingImage");
         $downloadingImage.on('load', function(){
@@ -11,8 +12,7 @@ module.controller('NewGameController', ['$scope', '$state', function ($scope, $s
         $downloadingImage.attr( "src", window.location + '/img/start.png' );
     });
 
-    $scope.loadFirstChapter = function(){
-        sessionStorage.episode = 1;
-        $state.go('story', {episode: 1})
+    $scope.loadFirstChapter = function() {
+        $state.go('story')
     }
 }]);

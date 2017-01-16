@@ -75,10 +75,23 @@ public class Answer {
         this.answerD = answerD;
     }
 
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id='" + id + '\'' +
+                ", episode=" + episode +
+                ", answerA=" + answerA +
+                ", answerB=" + answerB +
+                ", answerC=" + answerC +
+                ", answerD=" + answerD +
+                '}';
+    }
+
     public class ActualAnswer {
         public String outcome;
         public String storyText;
         public int next;
         public int time;
+
     }
 }
