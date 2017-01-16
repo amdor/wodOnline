@@ -51,10 +51,10 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
                              xpGain + " experience";
           });
         } else {
-            $.get("proxy.php", {"npc": answerResponse.outcome},
+            $.get("/npc", {"npc": answerResponse.outcome},
             function(data) {
                 $scope.$apply(function(){
-                    var npc = JSON.parse( data );
+                    var npc = data;
                     var outcome = characterUtils.fight( npc );
                     xpGain = outcome.xpGain;
                     if (xpGain > 0) {
@@ -67,11 +67,12 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
                            "Luckily he could escape before got killed, as he realized the differences.\n"
                            + "He lost " + characterUtils.character.healthPoint + " health points.";
                     } else {
+                        $state.go("story.newGame");
                         //showing a die modal
                         var body = "<pre>" + outcome.fightText + "</pre>" + "<p><b>Rhonin died, " +
-                                                 "the game is lost. Upon continuing, the first episode will appear</p><b>"
+                                                 "the game is lost. Upon continuing, the first episode will appear</p><b>";
                         notifications.showConfirm("Game Over", body, "Confirm", function() {
-                            $state.go("story.newGame");
+                            //noop
                         });
                     }
                 });

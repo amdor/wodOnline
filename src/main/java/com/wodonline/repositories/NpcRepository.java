@@ -12,4 +12,6 @@ public interface NpcRepository extends MongoRepository<Npc, String> {
 
     List<Npc> findAll();
 
+    Npc findByName(String name);
+
 }

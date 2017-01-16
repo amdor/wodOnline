@@ -1,0 +1,42 @@
+[
+  {
+    "_id": {
+      "$oid": "56f97519e4b023b4b9f6a0c5"
+    },
+    "Name": "Agmar",
+    "attackPower": 13,
+    "defensePower": 7,
+    "healthPoint": 90,
+    "level": 2
+  },
+  {
+    "_id": {
+      "$oid": "56f97564e4b023b4b9f6a489"
+    },
+    "Name": "wolf",
+    "attackPower": 8,
+    "defensePower": 5,
+    "healthPoint": 70,
+    "level": 1
+  },
+  {
+    "_id": {
+      "$oid": "56f9758be4b05b85f7a249e3"
+    },
+    "Name": "Elfron",
+    "attackPower": 20,
+    "defensePower": 32,
+    "healthPoint": 1000,
+    "level": 20
+  },
+  {
+    "_id": {
+      "$oid": "56f97626e4b023b4b9f6aec6"
+    },
+    "Name": "doorman",
+    "attackPower": 16,
+    "defensePower": 5,
+    "healthPoint": 100,
+    "level": 3
+  }
+]

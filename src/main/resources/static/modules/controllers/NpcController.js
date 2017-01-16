@@ -13,7 +13,7 @@ module.controller('NpcController', ['$scope', 'notifications',
      * Gets npcs from the database
      */
     $scope.$on('$viewContentLoaded', function(event){
-        $.get("/npc", fillTable)
+        $.get("/npcs", fillTable)
         .fail(function(){
            $scope.$apply(function() {showAlert("Request resulted in error");});
         });

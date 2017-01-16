@@ -169,7 +169,7 @@ module.factory('characterUtils', ['notifications', function(){
     }
 
     return {
-        "character" : character,
+        "character" : loadCharacter(),
         "newCharacter" : Character,
         "fail" : fail,
         "reward" : reward,
