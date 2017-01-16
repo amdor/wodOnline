@@ -6,22 +6,23 @@
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse"
-                        data-target="#toggleNavbar" aria-expanded="false">
+                        data-target="#toggleNavbar" aria-expanded="false" ng-blur="toggleNav()">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">WoD</a>
+                <a class="navbar-brand" style="border-right:1px solid #DDDDDD; cursor:pointer;"
+                   href="#">WoD</a>
             </div>
             <div class="collapse navbar-collapse" id="toggleNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a id="npcBookNavElem" ng-click="npcState();">NPC Book</a></li>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li style="border-right:1px solid #DDDDDD;"><a href="#" id="newGameNavElem" ng-click="newGameClicked();">New game</a></li>
                     <li style="border-right:1px solid #DDDDDD;"><a href="#" id="loadGameNavElem" ng-click="loadGameClicked();">Load</a></li>
                     <li><a href="#" id="saveGameNavElem" ng-click="saveGameClicked();">Save</a></li>
-                </ul>
-                <ul class="nav navbar-nav">
-                    <li><a href="views/npc.html" id="npcBookNavElem">NPC Book</a></li>
                 </ul>
             </div>
         </div>

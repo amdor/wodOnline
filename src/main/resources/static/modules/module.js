@@ -51,5 +51,14 @@ module.config(function($stateProvider){
                 answer: null
             }
         })
+        .state('npc',
+                {
+                    views: {
+                        'ContentView': {
+                            templateUrl: 'modules/views/NPCViewTemplate.html',
+                            controller: 'NpcController'
+                        }
+                    }
+                })
 });
 

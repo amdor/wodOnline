@@ -1,0 +1,30 @@
+<div class="bodydiv container" id="bodydiv">
+    <div class="container" id="content_container">
+        <div class="container" id="npcDataContainer" style="background-color: rgba(255,255,255,0.8);font-family: 'Varela Round', sans-serif;white-space: pre-line;">
+			    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-10">
+            <table id="npcTable" class="table table-hover">
+                <thead>
+                    <tr>
+						<th>Name</th>
+                        <th>Attack power</th>
+                        <th>Defense power</th>
+                        <th>Healthpoint</th>
+                        <th>Level</th>
+                    </tr>
+                </thead>
+                <tbody id="npcTable_body" ng-repeat="npc in npcs">
+                    <tr>
+                        <td>{{npc.name}}</td>
+                        <td>{{npc.attackPower}}</td>
+                        <td>{{npc.defensePower}}</td>
+                        <td>{{npc.healthPoint}}</td>
+                        <td>{{npc.level}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+		</div>
+	</div>
+</div>

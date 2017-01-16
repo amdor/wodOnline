@@ -16,7 +16,8 @@ public class AnswerController {
     private AnswerRepository repository;
 
     @RequestMapping(value = "/answer", method = RequestMethod.GET)
-    public Answer.ActualAnswer story(@RequestParam(value = "answer") int episode, @RequestParam(value = "answerLetter") String answer) {
+    public Answer.ActualAnswer story(@RequestParam(value = "answer") int episode,
+                                     @RequestParam(value = "answerLetter") String answer) {
         Answer actualAnswer =  repository.findByEpisode(episode);
         switch (answer) {
             case "A" : return actualAnswer.getAnswerA();

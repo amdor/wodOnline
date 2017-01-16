@@ -3,7 +3,6 @@ var module = angular.module("storyModule");
 module.controller("IndexController", ['$scope', '$state', 'characterUtils',
                     function($scope, $state, characterUtils){
 
-    $scope.showModal = false;
     var episode;
     var character;
 

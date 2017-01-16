@@ -39,6 +39,17 @@ module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'no
         showInfo("Saved");
     }
 
+    $scope.npcState = function() {
+        $state.go("npc");
+    }
+
+    $scope.toggleNav = function() {
+       var navbarControl = $('.navbar-toggle');
+       if ( navbarControl.attr("aria-expanded") === 'true' ) {
+          $("#toggleNavbar").collapse('hide');
+       }
+    }
+
     function newGameConfirmed() {
        sessionStorage.clear();
        localStorage.clear();
