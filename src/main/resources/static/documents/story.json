@@ -1,8 +1,5 @@
 [
    {
-      "_id": {
-         "$oid": "574c9d33f8c2e72174975158"
-      },
       "Episode": 1,
       "Title": "Tavern:",
       "Content": "A hero is to be brave, no matter what. Rhonin wasn't a hero, but a mere traveler. A traveler who got involved in adventures more often than he preferred. After some time, he got to love it this way as he had no option to live a regular life.\nThis evening wasn't any different. He was about to finish his last beer at the Tavern and call the night, when suddenly a hooded, monstrous guy covered with thick leather armor under his coat stepped in. The plank flooring trembled, making bottles silently clinking on his way. Only a few recognized him. Those who did, moved back to the safety of the corners' shadows as fast as they could, without drawing any attention to themselves. Rhonin also knew him. He was Agmar, the half-blood orc. Hobby bandit. His intention was clear at first site. The gang probably surrounded the Tavern so patrol's not notified and Agmar can raid the place. Not any surprise though, given that the Tavern is rather cheap but popular place at the South-West edge of the village. Of course the owner paid two sturdy bouncers who could throw out any lone bezonian with ease. They are not foolish enough to insult the colossus, without even knowing who, or what he is. Rhonin...  ",
@@ -22,9 +19,6 @@
       ]
    },
    {
-      "_id": {
-         "$oid": "574c9d33f8c2e72174975159"
-      },
       "Episode": 2,
       "Title": "Forest near Hamerntar",
       "Content": "There were obviously more suspicious people in the village than pleasant, so Rhonin thought better to stay in the forest for the night. It took no time for an experienced adventurer like him to find a well-hidden place to sleep. If only reckonings had been anytime right. He had heard some noises shortly after entering the wood, but seen nothing. The noises were following him to the camp. He was sure that these are only some animals. According to their sounds nothing to be afraid of. A deer, maybe foxes. Curious though, why were they following? At night the noises started again, but this time louder. There was no campfire and his pack was out of reach, not like he had any weapons in it. Bad thing, because a moment later two wolves came out from behind a bush. Lucky they strayed from their pack somehow.",
@@ -44,9 +38,6 @@
       ]
    },
    {
-      "_id": {
-         "$oid": "56fabdd1e4b05b85f7b1f155"
-      },
       "Episode": 3,
       "Title": "West-Wirmgold city limits:",
       "Content": "After long days of ramble on foot through deep gorges and up steep, forested hillsides Rhonin got to glimpse the city among the mighty oaks. He knew, his destination is near. New hope was arising in his heart as the sun reached to the top of the sky. He had business to take care of in there and it had been a long journey anyway. Making a haste he was thinking if  many was living here still of the people he didn't want to meet, or rather less.\n The next day morning, when he arrived to the gates, he had the luck to see his old friend Elfron - one of the aforementioned - acting as the city commander, just coming out supervising the guards. Last time Rhonin saw him, he was only a sergeant full with ambitions, but lacking life experience. He was about the same age as Rhonin, that is nothing for an elf like him. He somehow noticed the traveler's attention, and by the grim smile on his face, he recognized Rhonin too. Rhonin really needed to get in.",
@@ -66,9 +57,6 @@
       ]
    },
    {
-      "_id": {
-         "$oid": "5720e7ddfca0fd5e9f760873"
-      },
       "Episode": 4,
       "Title": "West-Wirmgold",
       "Content": "Rhonin has been in the city for two days and yet nothing bad happened. The lower districts smelled as always. The food was strange but tasty. The weather was windy that's usual this time of the year. It was like the very nature would have wanted to say 'everything is just fine'. He didn't waste any time though. He was feeling in his bones: something is coming and it's not winter. That's why he was looking for his old friend. Good thing about Sneka that he was very sneaky and knew the talks before getting around. Bad thing that he was sneaky and hard to find. He must have known his friend is in town. This crowned Rhonin's worries as it looked like his fellow elf had something to hide. He was thinking of these when all of the sudden he spotted Sneka entering a minority club. Were just his eyes cheating him? These pubs did not become separated by city order, the visitors and owners kept its exclusivity.",
@@ -88,10 +76,30 @@
       ]
    },
    {
-      "_id": {
-         "$oid": "572377d2fca0fd7cf0f28520"
-      },
-      "Episode": 1001,
+      "Episode": 5,
+      "Title": "West-Wirmgold",
+      "Content": "Rhonin is inside and arriving just in time to catch Sneka.\n-I hoped not to run into you my friend. Happy to see you though.\n-What are you hiding?\n-Sorry, Rhonin. I would have seeked your help if there would be any hope. The best you can do is to hide. Hide as we did in the old times. Hide as I showed.\n-Don't go in circles. Tell me what's in the air!\n-Louder! They don't hear you yet........eh, the council. The wizard council turns out to be more or less warlock council? I don't know these ranks, types, categories, but one for sure. They found an ancient scroll of some sort. They want to bring back to life something, a beast that should never ever again roam these lands. Pack up and run, they cannot be stopped now.\n-Thank you. Once again, I owe you.\n-You bet! I won't forget it.",
+      "Answers": [
+         {
+            "text": "(a) Next chapter"
+         }
+      ]
+   },
+   {
+      "Episode": 6,
+      "Title": "Doomsday",
+      "Content": "If the council is in it, there is really no way to stand a chance. That would need much time and preparation. No others know anything about the things Sneka was talking about though. Rhonin is considering to leave the city and seek answers as he is sure that this is not going to be some usual war against the sorrounding nations. No. This is going to be something old, but something very new to this generation.\nSuddenly the earth starts shaking, the air turn into a black mass of screams and cries of agony. The sound is unbearable. People are running in fear, not even knowing what's happened. Than as instantaniously as it came all ended. Nothing breaks the silence but a last echoing growl of triumph, pulsing over the streets without ease on its way. It is like a whisper of threat, but one that conquers the universe. One that you cannot hide from and chills you to the bones if reaches you. Rhonin feels like he cannot move, for minutes. His legs are not responding to his orders. \nWhat to do now?",
+      "Answers": [
+         {
+            "text": "(a) He should go East, find his master, hoping he has answers."
+         },
+         {
+            "text": "(b) He visits the city center, wants to ask around. Mages now have to answer the city, and him."
+         }
+      ]
+   },
+   {
+      "Episode": 7,
       "Title": "Doomsday",
       "Content": "The day Rhonin feared has come. After he lost sight of his friend he's never seen him once again. Word got out that Sneka left the city in a hurry. In most cases it's Sneka starting these rumors of himself. Or he was in such hurry, he didn't even care to be seen. \nOne for sure, Rhonin failed looking for him. Now then, a few days later he's considering getting in touch with the high priests. Unfortunate, because he could never count on a straight answer from priests of the Holy Order. But suddenly the earth starts shaking, the air turn into a black mass of screams and cries of agony. The sound is unbearable. People are running in fear, not even knowing what's happened. Than as instantaniously as it came all ended. Nothing breaks the silence but a last echoing growl of triumph, pulsing over the streets without ease on its way. It is like a whisper of threat, but one that conquers the universe. One that you cannot hide from and chills you to the bones if reaches you. Rhonin feels like he cannot move, for minutes. His legs are not responding to his orders. What to do now?",
       "Answers": [
@@ -110,42 +118,7 @@
       ]
    },
    {
-      "_id": {
-         "$oid": "574c9d33f8c2e7217497515b"
-      },
-      "Episode": 1002,
-      "Title": "Eastern road",
-      "Content": "On the dusty road to East it is all crowded, full of merchants, rallying the infinite miles in a steady-slow pace. They are like a horde of zombies. At night though, life comes to play at the campfires. Bottles openin, brawls starting and new friendships forming. This is a long journay. After a week, the caravan get to Esaterodon, the biggest city on the way before Esacotor, the center of East. Even though it is considered big compared to the other villages, it has only a few thousands of people living in it. More people is going through its gates day by day than the number of its inhabitants.",
-      "Answers": [
-         {
-            "text": "(a) Rhonin stays at the city to fill his resources before continuing his journay."
-         },
-         {
-            "text": "(b) Rhonin leaves the city next day."
-         }
-      ]
-   },
-   {
-      "_id": {
-         "$oid": "574c9d33f8c2e7217497515a"
-      },
-      "Episode": 2001,
-      "Title": "Doomsday",
-      "Content": "If the council is in it, there is really no way to stand a chance. That would need much time and preparation. No others know anything about the things Sneka was talking about though. Rhonin is considering to leave the city and seek answers as he is sure that this is not going to be some usual war against the sorrounding nations. No. This is going to be something old, but something very new to this generation.\nSuddenly the earth starts shaking, the air turn into a black mass of screams and cries of agony. The sound is unbearable. People are running in fear, not even knowing what's happened. Than as instantaniously as it came all ended. Nothing breaks the silence but a last echoing growl of triumph, pulsing over the streets without ease on its way. It is like a whisper of threat, but one that conquers the universe. One that you cannot hide from and chills you to the bones if reaches you. Rhonin feels like he cannot move, for minutes. His legs are not responding to his orders. \nWhat to do now?",
-      "Answers": [
-         {
-            "text": "(a) He should go East, find his master, hoping he has answers."
-         },
-         {
-            "text": "(b) He visits the city center, wants to ask around. Mages now have to answer the city, and him."
-         }
-      ]
-   },
-   {
-      "_id": {
-         "$oid": "574c9d33f8c2e7217497515c"
-      },
-      "Episode": 2002,
+      "Episode": 8,
       "Title": "Death",
       "Content": "The view is terrifying. Where there was the wizards' tower, now only a crater is. And stone fragments. Bones not yet buried. Closer to the center there are not even bones, only shadows of manlike forms on the ground. As far as the city guards could inform him there were no witnesses. No one survived within sight.",
       "Answers": [
@@ -162,5 +135,18 @@
             "text": "(d) Rhoning heads East to find his former mentor, asking his wise advice."
          }
       ]
-   }
+   },
+   {
+   "Episode": 1001,
+   "Title": "Eastern road",
+   "Content": "On the dusty road to East it is all crowded, full of merchants, rallying the infinite miles in a steady-slow pace. They are like a horde of zombies. At night though, life comes to play at the campfires. Bottles openin, brawls starting and new friendships forming. This is a long journay. After a week, the caravan get to Esaterodon, the biggest city on the way before Esacotor, the center of East. Even though it is considered big compared to the other villages, it has only a few thousands of people living in it. More people is going through its gates day by day than the number of its inhabitants.",
+   "Answers": [
+      {
+         "text": "(a) Rhonin stays at the city to fill his resources before continuing his journay."
+      },
+      {
+         "text": "(b) Rhonin leaves the city next day."
+      }
+   ]
+},
 ]

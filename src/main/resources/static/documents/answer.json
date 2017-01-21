@@ -1,8 +1,5 @@
 [
    {
-      "_id": {
-         "$oid": "571bb0e90a00b22beb2b9983"
-      },
       "Episode": 1,
       "A": {
          "outcome": "fail",
@@ -22,9 +19,6 @@
       }
    },
    {
-      "_id": {
-         "$oid": "571bb0e90a00b22beb2b9984"
-      },
       "Episode": 2,
       "A": {
          "outcome": "reward",
@@ -48,9 +42,6 @@
       }
    },
    {
-      "_id": {
-         "$oid": "571bb0e90a00b22beb2b9985"
-      },
       "Episode": 3,
       "A": {
          "outcome": "fail",
@@ -74,115 +65,121 @@
       }
    },
    {
-      "_id": {
-         "$oid": "574ca27c0a00b21cfb4f991c"
-      },
       "Episode": 4,
       "A": {
          "outcome": "fail",
          "storyText": "He is asked to do things to himself that would normally require two adults. The other option includes ropes and much violance. Rhonin won't get in.",
-         "next": 1001,
+         "next": 7,
          "time": 2
       },
       "B": {
          "outcome": "fail",
          "storyText": "The doorman assures him, he won't get inside alive. Not even if he has an army backing him.",
-         "next": 1001,
+         "next": 7,
          "time": 2
       },
       "C": {
          "outcome": "doorman",
          "storyText": "Rhonin fought well, but drawing the whole place's attention is not the way to get in silently. He missed this opportunity, now eyes are watching him leave.",
-         "next": 1001,
+         "next": 7,
          "time": 2
       },
       "D": {
          "outcome": "reward",
-         "storyText": "Rhonin is inside and arriving just in time to catch Sneka.\n-I hoped not to run into you my friend. Happy to see you though.\n-What are you hiding?\n-Sorry, Rhonin. I would have seeked your help if there would be any hope. The best you can do is to hide. Hide as we did in the old times. Hide as I showed.\n-Don't go in circles. Tell me what's in the air!\n-Louder! They don't hear you yet........eh, the council. The wizard council turns out to be more or less warlock council? I don't know these ranks, types, categories, but one for sure. They found an ancient scroll of some sort. They want to bring back to life something, a beast that should never ever again roam these lands. Pack up and run, they cannot be stopped now.\n-Thank you. Once again, I owe you.\n-You bet! I won't forget it.",
-         "next": 2001,
+         "storyText": "Rhonin found Sneka.",
+         "next": 5,
          "time": 2
       }
    },
    {
-      "_id": {
-         "$oid": "574ca27c0a00b21cfb4f991d"
-      },
-      "Episode": 1001,
+      "Episode": 5,
+      "A": {
+         "outcome": "reward",
+         "storyText": "",
+         "next": 6,
+         "time": 2
+      }
+   },
+   {
+      "Episode": 6,
       "A": {
          "outcome": "reward",
          "storyText": "And the journay never ends.",
-         "next": 1002,
+         "next": 1001,
          "time": 7
       },
       "B": {
          "outcome": "reward",
          "storyText": "",
-         "next": 2002,
+         "next": 8,
+         "time": 7
+      }
+   },
+   {
+      "Episode": 7,
+      "A": {
+         "outcome": "reward",
+         "storyText": "And the journay never ends.",
+         "next": 1001,
+         "time": 7
+      },
+      "B": {
+         "outcome": "reward",
+         "storyText": "",
+         "next": 8,
          "time": 7
       },
       "C": {
          "outcome": "fail",
          "storyText": "-Can't you read? What do you want?\n-Answers! What is happening in West-Wirmgold?\n-They summoned the ultimate evil. Just a matter of time when they are going to lose control over it. If not did already. Don't look for me anymore. I'm invisible from now!",
-         "next": 5
+         "stayInCity": 1
       },
       "D": {
          "outcome": "fail",
          "storyText": "He should be doing something though.",
-         "next": 5
+         "stayInCity": 1
       }
    },
    {
-      "_id": {
-         "$oid": "574ca27c0a00b21cfb4f991f"
-      },
-      "Episode": 1002,
-      "A": {
-         "outcome": "",
-         "storyText": "",
-         "next": 0,
-         "time": 0
-      },
-      "B": {
-         "outcome": "",
-         "storyText": "",
-         "next": 0,
-         "time": 0
-      }
-   },
-   {
-      "_id": {
-         "$oid": "574ca27c0a00b21cfb4f991e"
-      },
-      "Episode": 2001,
+      "Episode": 8,
       "A": {
          "outcome": "reward",
-         "storyText": "And the journay never ends.",
-         "next": 1002,
+         "storyText": "",
+         "stayInCity": 1,
          "time": 7
       },
       "B": {
          "outcome": "reward",
          "storyText": "",
-         "next": 2002,
+         "stayInCity": 1,
+         "time": 7
+      },
+      "C": {
+         "outcome": "reward",
+         "storyText": "",
+         "stayInCity": 1,
+         "time": 7
+      },
+      "D": {
+         "outcome": "reward",
+         "storyText": "",
+         "next": 1001,
          "time": 7
       }
    },
    {
-      "_id": {
-         "$oid": "574ca27c0a00b21cfb4f9920"
-      },
-      "Episode": 2002,
+      "Episode": 1001,
       "A": {
-         "outcome": "",
+         "outcome": "reward",
          "storyText": "",
-         "next": 0,
-         "time": 0
+         "stayInCity": 1,
+         "time": 14
       },
       "B": {
-         "outcome": "",
+         "outcome": "reward",
          "storyText": "",
-         "next": 0,
-         "time": 0
+         "next": 2001,
+         "time": 14
       }
    }
 ]

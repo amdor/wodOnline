@@ -92,6 +92,7 @@ public class Answer {
         public String storyText;
         public int next;
         public int time;
+        public int stayInCity;
 
     }
 }
