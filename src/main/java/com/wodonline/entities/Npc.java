@@ -8,35 +8,26 @@ import org.springframework.data.mongodb.core.mapping.Field;
  * Created by Zsolt on 2017. 01. 16..
  */
 @Document(collection="npc")
-public class Npc {
+public class Npc extends AbstractCharacter {
     @Id
-    private String id;
+    String id;
 
     @Field("Name")
-    private String name;
+    String name;
 
-    @Field("attackPower")
-    private int attackPower;
+    public Npc(){}
 
-    @Field("defensePower")
-    private int defensePower;
-
-    @Field("healthPoint")
-    private int healthPoint;
-
-    @Field("level")
-    private int level;
-
-    public Npc(String name, int attackPower, int defensePower, int healthPoint, int level) {
+    public Npc(int attackPower, int defensePower, int healthPoint, int level, String name) {
+        super(attackPower, defensePower, healthPoint, level);
         this.name = name;
-        this.attackPower = attackPower;
-        this.defensePower = defensePower;
-        this.healthPoint = healthPoint;
-        this.level = level;
     }
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -45,38 +36,6 @@ public class Npc {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getAttackPower() {
-        return attackPower;
-    }
-
-    public void setAttackPower(int attackPower) {
-        this.attackPower = attackPower;
-    }
-
-    public int getDefensePower() {
-        return defensePower;
-    }
-
-    public void setDefensePower(int defensePower) {
-        this.defensePower = defensePower;
-    }
-
-    public int getHealthPoint() {
-        return healthPoint;
-    }
-
-    public void setHealthPoint(int healthPoint) {
-        this.healthPoint = healthPoint;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
     }
 
     @Override
