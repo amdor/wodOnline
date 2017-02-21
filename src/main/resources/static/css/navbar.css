@@ -1,0 +1,7 @@
+.navbar-nav>li>a:hover {
+    font-weight: bold;
+}
+
+li>a {
+    cursor: pointer;
+}
