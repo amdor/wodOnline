@@ -1,7 +1,7 @@
 var module = angular.module("storyModule");
 
-module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'characterUtils', 'notifications',
-                    function ($scope, $state, $stateParams, characterUtils, notifications){
+module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'characterUtils', 'notifications', '$http',
+                    function ($scope, $state, $stateParams, characterUtils, notifications, $http){
 
     var episode = characterUtils.loadCharacter().episode;
     var answer = $stateParams.answer;
@@ -20,7 +20,7 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
      * Gets the corresponding answer's results from the database
      */
     function getAnswer() {
-       $.get("/answer", {"answer": episode, "answerLetter": answer}, handleAnswerResponse)
+       $http.get("/answer", {"answer": episode, "answerLetter": answer}, handleAnswerResponse)
         .fail(function(){
            $scope.$apply(function() {showAlert("Request resulted in error");});
         });
@@ -51,7 +51,7 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
                              xpGain + " experience";
           });
         } else {
-            $.get("/npc", {"npc": answerResponse.outcome},
+            $http.get("/npc", {"npc": answerResponse.outcome},
             function(data) {
                 var npc = data;
                 $scope.answerText = answerResponse.storyText;

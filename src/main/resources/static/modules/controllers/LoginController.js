@@ -11,7 +11,9 @@ module.controller('LoginController', ['$scope', '$state', 'notifications', 'Auth
     $scope.login = function() {
         AuthService.login( $scope.credentials.username, $scope.credentials.password,
             function(response) {
+                console.log(response.status);
                 $state.go('story');
-        });
+            }
+        );
     }
 }]);

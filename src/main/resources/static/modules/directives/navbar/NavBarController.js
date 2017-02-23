@@ -1,7 +1,7 @@
 var module = angular.module("storyModule");
 
-module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'notifications',
-                function($scope, $state, characterUtils, notifications) {
+module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'notifications', 'AuthService',
+                function( $scope, $state, characterUtils, notifications, AuthService ) {
     var showInfo = notifications.showInfo;
     var showAlert = notifications.showAlert;
     var showConfirm = notifications.showConfirm;
@@ -40,7 +40,14 @@ module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'no
     }
 
     $scope.logoutClicked = function() {
-        $state.go("login");
+        AuthService.logout(
+            function(response) {
+                showInfo("Successfully logged out!")
+            },
+            function( response ) {
+                showAlert("Logout failed");
+            }
+        );
     }
 
     $scope.npcState = function() {

@@ -3,7 +3,7 @@ var app = angular.module("storyModule");
 app.factory('AuthService', ['$http' , function( $http ) {
 
     function login( username, pass, success ) {
-        $.post("/", {username: username, password: pass})
+        $http.post("/", {username: username, password: pass})
         .then(
         function(response) {
             success(response);
@@ -13,7 +13,10 @@ app.factory('AuthService', ['$http' , function( $http ) {
         });
     }
 
-    function logout() {}
+    function logout( success, failure ) {
+        $http.post( "/logout" )
+        .then( success, failure );
+    }
 
     return {
         login: login,

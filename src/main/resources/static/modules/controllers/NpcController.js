@@ -1,7 +1,7 @@
 var module = angular.module("storyModule");
 
-module.controller('NpcController', ['$scope', 'notifications',
-            function($scope, notifications) {
+module.controller('NpcController', ['$scope', 'notifications', '$http',
+            function($scope, notifications, $http) {
 
     $scope.npcs = [];
     var showAlert = notifications.showAlert;
@@ -10,7 +10,7 @@ module.controller('NpcController', ['$scope', 'notifications',
      * Gets npcs from the database
      */
     $scope.$on('$viewContentLoaded', function(event){
-        $.get("/npcs", fillTable)
+        $http.get("/npcs", fillTable)
         .fail(function(){
            $scope.$apply(function() {showAlert("Request resulted in error");});
         });

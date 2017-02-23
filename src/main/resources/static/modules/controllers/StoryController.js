@@ -1,7 +1,7 @@
 var module = angular.module("storyModule");
 
-module.controller('StoryController', ['$scope', '$state', 'characterUtils', 'notifications',
-                    function ($scope, $state, characterUtils, notifications){
+module.controller('StoryController', ['$scope', '$state', 'characterUtils', 'notifications', '$http',
+                    function ($scope, $state, characterUtils, notifications, $http ){
 
     var showAlert = notifications.showAlert;
 
@@ -65,26 +65,26 @@ module.controller('StoryController', ['$scope', '$state', 'characterUtils', 'not
     ////Server communications//////////
     ///////////////////////////////////
     function loadStory( ep ) {
-        $.get("/story", {"story": ep}, function(data){
-            var response = data;
-            $scope.$apply(function() {
-                $scope.chapterTitle = response.title;
-                $scope.chapterText = response.content;
-                $scope.numberOfAnswers = response.answers.length;
-                for(var i = 0; i < response.answers.length; i++) {
-                    $scope.chapterText += '\r\n\r\n'+response.answers[i].text;
-                }
-            });
-        })
-        .fail(function(){
-            $scope.$apply(function() {
-                showAlert("Request resulted in error");
-            });
-        })
-        .always(function() {
-            $scope.$apply(function() {
-                $scope.showSpinner = false;
-            });
-        });
+        $http.get("/story", {params:{"story": ep}})
+        .then(
+            function(data) {
+                var response = data.data;
+//                $scope.$apply(function() {
+                    $scope.chapterTitle = response.title;
+                    $scope.chapterText = response.content;
+                    $scope.numberOfAnswers = response.answers.length;
+                    for(var i = 0; i < response.answers.length; i++) {
+                        $scope.chapterText += '\r\n\r\n'+response.answers[i].text;
+                    }
+                    $scope.showSpinner = false;
+//                });
+            }
+            ,function(){
+                $scope.$apply(function() {
+                    $scope.showSpinner = false;
+                    showAlert("Request resulted in error");
+                });
+            }
+        );
     }
 }]);

@@ -4,7 +4,7 @@
 
 var module = angular.module("storyModule");
 
-module.factory('characterUtils', ['notifications', function(){
+module.factory('characterUtils', ['$http', function($http){
 
     const STORAGE_KEY = "character";
 
@@ -69,7 +69,7 @@ module.factory('characterUtils', ['notifications', function(){
      * @returns xp gained by the fight: 0 if lost of course (in completion handler)
      */
     function fight( actEnemy, completionHandler ) {
-        $.get("/fight", {enemy: JSON.stringify(actEnemy), character: JSON.stringify(character)})
+        $http.get("/fight", {enemy: JSON.stringify(actEnemy), character: JSON.stringify(character)})
         .then(
         function(response) {
             var data = JSON.parse(response);
