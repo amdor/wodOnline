@@ -5,9 +5,10 @@ module.controller('StoryController', ['$scope', '$state', 'characterUtils', 'not
 
     var showAlert = notifications.showAlert;
 
-    var character = characterUtils.loadCharacter();
-    var episode = character.episode;
-    character.healthPoint = (character.healthPoint < character.maxHP - 20) ? character.healthPoint + 20 : character.maxHP;
+    $scope.character;
+    characterUtils.loadCharacter( function( loadedCharacter ) {
+        $scope.character = loadedCharacter;
+    });
     $scope.chapterTitle = "";
     $scope.chapterText = "";
     $scope.characterStats = "";
@@ -16,10 +17,11 @@ module.controller('StoryController', ['$scope', '$state', 'characterUtils', 'not
     $scope.answerLetters = ['A', 'B', 'C', 'D'];
 
 
-    $scope.$on('$viewContentLoaded', function(event){
+    $scope.$watch('character', function(newVal, oldVal) {
+        if(newVal == null) {return;}
         $scope.characterStats = refreshCharacterData();
         refreshXPBar();
-        loadStory(episode);
+        loadStory($scope.character.episode);
     });
 
     $scope.range = function(n) {
@@ -48,15 +50,15 @@ module.controller('StoryController', ['$scope', '$state', 'characterUtils', 'not
     ///STATE CHANGE///
     /////////////////
     function refreshCharacterData() {
-       var characterText = "Attack power: " + character.attackPower + "\n" +
-                        "Defense power: " + character.defensePower + "\n" +
-                        "Health point: " + character.healthPoint + " / " + character.maxHP + "\n" +
-                        "Level: " + character.level + "\n";
-       return characterText
+        var characterText = "Attack power: " + $scope.character.attackPower + "\n" +
+                        "Defense power: " + $scope.character.defensePower + "\n" +
+                        "Health point: " + $scope.character.healthPoint + " / " + $scope.character.maxHP + "\n" +
+                        "Level: " + $scope.character.level + "\n";
+        return characterText
     }
 
     function refreshXPBar() {
-        var newVal = Math.round( character.experience * 100 / characterUtils.nextLevelXP() );
+        var newVal = Math.round( $scope.character.experience * 100 / characterUtils.nextLevelXP() );
         $("#xp_progress_bar").width( newVal + "%" )
                     .attr( 'aria-valuenow', newVal );
     }
@@ -69,7 +71,6 @@ module.controller('StoryController', ['$scope', '$state', 'characterUtils', 'not
         .then(
             function(data) {
                 var response = data.data;
-//                $scope.$apply(function() {
                     $scope.chapterTitle = response.title;
                     $scope.chapterText = response.content;
                     $scope.numberOfAnswers = response.answers.length;
@@ -77,7 +78,6 @@ module.controller('StoryController', ['$scope', '$state', 'characterUtils', 'not
                         $scope.chapterText += '\r\n\r\n'+response.answers[i].text;
                     }
                     $scope.showSpinner = false;
-//                });
             }
             ,function(){
                 $scope.$apply(function() {

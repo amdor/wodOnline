@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection="player")
 public class Player extends AbstractCharacter {
 
-    String userName;
+    String username;
 
     String password;
 
@@ -16,6 +16,8 @@ public class Player extends AbstractCharacter {
     int episode;
 
     public Player() {
+        this.username = "";
+        this.password = "";
         this.attackPower = 10;
         this.defensePower = 8;
         this.healthPoint = 120;
@@ -25,19 +27,21 @@ public class Player extends AbstractCharacter {
         this.episode = 1;
     }
 
-    public Player(int attackPower, int defensePower, int healthPoint, int maxHP, int experience, int level, int episode) {
+    public Player(String userName, String password, int attackPower, int defensePower, int healthPoint, int maxHP, int experience, int level, int episode) {
         super(attackPower, defensePower, healthPoint, level);
+        this.username = userName;
+        this.password = password;
         this.maxHP = maxHP;
         this.experience = experience;
         this.episode = episode;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

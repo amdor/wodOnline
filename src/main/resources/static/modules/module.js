@@ -69,5 +69,14 @@ module.config(function( $stateProvider, $locationProvider ) {
                 }
             }
         })
+        .state('register',
+        {
+            views: {
+                'ContentView': {
+                    templateUrl: 'modules/views/RegisterTemplate.html',
+                    controller: 'RegisterController'
+                }
+            }
+        })
 });
 

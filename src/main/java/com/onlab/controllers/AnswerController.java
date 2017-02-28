@@ -1,29 +1,50 @@
 package com.onlab.controllers;
 
 import com.onlab.entities.Answer;
+import com.onlab.entities.Player;
 import com.onlab.repositories.AnswerRepository;
+import com.onlab.repositories.PlayerRepository;
+import com.onlab.utils.PlayerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 public class AnswerController {
 
     @Autowired
-    private AnswerRepository repository;
+    private AnswerRepository answerRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
 
     @RequestMapping(value = "/answer", method = RequestMethod.GET)
-    public Answer.ActualAnswer story(@RequestParam(value = "answer") int episode,
-                                     @RequestParam(value = "answerLetter") String answer) {
-        Answer actualAnswer =  repository.findByEpisode(episode);
-        switch (answer) {
-            case "A" : return actualAnswer.getAnswerA();
-            case "B" : return actualAnswer.getAnswerB();
-            case "C" : return actualAnswer.getAnswerC();
-            case "D" : return actualAnswer.getAnswerD();
+    public String story(@RequestParam(value = "answer") int episode,
+                                     @RequestParam(value = "answerLetter") String answer,
+                                     Principal principal) throws NoSuchFieldException {
+        Answer answers =  answerRepository.findByEpisode(episode);
+        Answer.ActualAnswer actualAnswer = null;
+
+        if( principal == null || answer == null ) {
+            throw new NoSuchFieldException();
         }
-        throw(new IllegalArgumentException());
+        String name = principal.getName();
+        Player player = playerRepository.findByUsername(name);
+
+        if( player == null ) {
+            throw new NoSuchFieldException();
+        }
+
+        switch (answer) {
+            case "A" : actualAnswer = answers.getAnswerA();
+            case "B" : actualAnswer = answers.getAnswerB();
+            case "C" : actualAnswer = answers.getAnswerC();
+            case "D" : actualAnswer = answers.getAnswerD();
+        }
+
+        return PlayerUtils.afterAnsweredModifications(actualAnswer, player);
     }
 
     @ResponseStatus(value= HttpStatus.BAD_REQUEST,

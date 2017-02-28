@@ -27,14 +27,14 @@ module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'no
             }
             sessionStorage.clear();
             sessionStorage.setItem("episode", episode);
-            character = characterUtils.loadCharacter(localStorage);
+            character = characterUtils.loadCharacter(true);
             characterUtils.saveCharacter(); //to sessionstorage by default
             $state.go('story', {episode: episode})
         });
     }
 
     $scope.saveGameClicked = function(){
-        characterUtils.saveCharacter(characterUtils.character, localStorage);
+        characterUtils.saveCharacter();
         localStorage.setItem("episode", sessionStorage.getItem("episode"))
         showInfo("Saved");
     }

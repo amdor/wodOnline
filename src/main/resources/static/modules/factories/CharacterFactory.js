@@ -4,7 +4,7 @@
 
 var module = angular.module("storyModule");
 
-module.factory('characterUtils', ['$http', function($http){
+module.factory('characterUtils', ['$http', 'notifications', function( $http, notifications ) {
 
     const STORAGE_KEY = "character";
 
@@ -18,98 +18,46 @@ module.factory('characterUtils', ['$http', function($http){
         "episode": null
     };
 
-    function Character() {
-        character.attackPower = 10;
-        character.defensePower = 8;
-        character.healthPoint = 120;
-        character.maxHP = character.healthPoint;
-        character.experience = 0;
-        character.level = 1;
-        character.episode = 1;
+    function Character( copyObject ) {
+        character = {
+            "attackPower": copyObject.attackPower,
+            "defensePower": copyObject.defensePower,
+            "healthPoint": copyObject.healthPoint,
+            "maxHP": copyObject.maxHP,
+            "experience": copyObject.experience,
+            "level": copyObject.level,
+            "episode": copyObject.episode
+        };
         return character;
     }
-
-    function levelUp() {
-        character.attackPower += 2;
-        character.defensePower += 1;
-        character.maxHP += 20;
-        character.healthPoint = character.maxHP;
-        character.experience = 0;
-        character.level++;
-    }
-
-    function levelUpIfNeeded() {
-        if( ( character.experience - nextLevelXP() ) >= 0 ){
-            character.experience -= nextLevelXP();
-            levelUp();
-        }
-    }
-
-
-    /**
-    *   ACTIONS
-    */
-
-    function fail() {
-        var gain = character.level + 5;
-        finalizeAction(gain);
-        return gain;
-    }
-
-    function reward() {
-        var gain = ( character.level * 4 ) + 45;
-        finalizeAction(gain);
-        return gain;
-    }
-
-    /**
-     * Makes the fight: decreases life if needed, gives xp, levels up
-     * @param actEnemy the enemy to fight with
-     * @param completionHandler the handler to be called after the fight finished
-     * @returns xp gained by the fight: 0 if lost of course (in completion handler)
-     */
-    function fight( actEnemy, completionHandler ) {
-        $http.get("/fight", {enemy: JSON.stringify(actEnemy), character: JSON.stringify(character)})
-        .then(
-        function(response) {
-            var data = JSON.parse(response);
-            character = data.character;
-            finalizeAction(data.xpGain);
-            completionHandler( data.xpGain, data.fightText );
-        },
-        function( jqXHR, textStatus, errorThrown){
-           $scope.$apply(function() {showAlert("Request resulted in error");});
-        });
-    }
-
 
     /**
      *UTILITIES
     */
 
-    function saveCharacter(object, storage) {
-        if(storage == null){
-            storage = sessionStorage;
-        }
+    function saveCharacter(object) {
         if(object == null){
             object = character;
         }
-        storage.setItem(STORAGE_KEY, JSON.stringify(object));
+        $http.post("/save", object).then(
+        function(response) {
+            notifications.showInfo("Character saved");
+        },
+        function(response) {
+            notifications.showAlert("Save failed");
+        }
+        );
     }
 
-    function loadCharacter(storage) {
-        if(storage == null){
-            storage = sessionStorage;
-        }
-        var tmp = JSON.parse(storage.getItem(STORAGE_KEY));
-        if(tmp == null) {
-            Character();
-        }
-        else {
-            character = tmp;
-        }
-        return character;
-
+    function loadCharacter( success ) {
+        $http.get("/player").then(
+        function(response) {
+            Character( response.data );
+            success( character );
+        },
+        function( jqXHR, textStatus, errorThrown){
+           notifications.showAlert("Request resulted in error");
+        });
     }
 
     /**
@@ -126,18 +74,8 @@ module.factory('characterUtils', ['$http', function($http){
         }
     }
 
-    function finalizeAction(xpGain) {
-        character.experience += xpGain;
-        levelUpIfNeeded();
-        saveCharacter();
-    }
-
     return {
-        "character" : loadCharacter(),
-        "newCharacter" : Character,
-        "fail" : fail,
-        "reward" : reward,
-        "fight" : fight,
+        "character" : function(){return character},
         "saveCharacter" : saveCharacter,
         "loadCharacter" : loadCharacter,
         "nextLevelXP" : nextLevelXP

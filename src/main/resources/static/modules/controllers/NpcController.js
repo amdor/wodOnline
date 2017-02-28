@@ -11,15 +11,12 @@ module.controller('NpcController', ['$scope', 'notifications', '$http',
      */
     $scope.$on('$viewContentLoaded', function(event){
         $http.get("/npcs", fillTable)
-        .fail(function(){
-           $scope.$apply(function() {showAlert("Request resulted in error");});
+        .then(
+        function(){
+            $scope.npcs = data;
+            },
+        function(){
+           showAlert("Request resulted in error");
         });
     });
-
-    /**
-     * Handle response, fill table
-     */
-    function fillTable(data) {
-        $scope.$apply(function() {$scope.npcs = data;});
-    }
 }]);

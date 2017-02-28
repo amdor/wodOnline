@@ -3,75 +3,82 @@ package com.onlab.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onlab.entities.Npc;
 import com.onlab.entities.Player;
+import com.onlab.entities.ResponseClass;
+import com.onlab.repositories.PlayerRepository;
 import com.onlab.utils.PlayerUtils;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.security.Principal;
 
 @RestController
 public class PlayerController {
 
-    @RequestMapping(value = "/fight", method = RequestMethod.GET)
-    public String story(@RequestParam(value = "enemy")String enemy,
-                               @RequestParam(value = "character")String player) throws IOException {
-        int xpGain = 0;
-        String fightText = "";
-        ObjectMapper mapper = new ObjectMapper();
-        Npc actEnemy = mapper.readValue(enemy, Npc.class);
-        Player character = mapper.readValue(player, Player.class);
-        int characterHealth = character.getHealthPoint();
-        //enemy is too strong
-        if(actEnemy.getDefensePower() >= character.getAttackPower()){
-            characterHealth -= character.getHealthPoint()/2;
-            //opposit
-        } else if(character.getDefensePower() >= actEnemy.getAttackPower()){
-            xpGain = PlayerUtils.npcXpGain(actEnemy.getLevel(), character.getLevel());
+    @Autowired
+    private PlayerRepository playerRepository;
+
+    @Autowired
+    BCryptPasswordEncoder encoder;
+
+    @RequestMapping(value="/player", method = RequestMethod.GET)
+    public Player getPlayer( Principal principal ) throws NoSuchFieldException {
+        if( principal == null ) {
+            throw new NoSuchFieldException();
         }
-        //others
-        else {
-            int playerDmg = character.getAttackPower() - actEnemy.getDefensePower();
-            int oppDmg = actEnemy.getAttackPower() - character.getDefensePower();
-            double rndPlayerDmg = Math.floor(playerDmg * ((Math.random() * 1.5) + 0.8)); //damage * [0.8..1.5]
-            double rndOppDmg = Math.floor(oppDmg * ((Math.random() * 1.5) + 0.8));
-            fightText = "";
-            int enemyHealth = actEnemy.getHealthPoint();
-            while (((enemyHealth -= rndPlayerDmg) > 0)
-                    && ((characterHealth -= rndOppDmg) > 0)) {
-                rndPlayerDmg = Math.floor(playerDmg * ((Math.random() * 1.5) + 1));
-                rndOppDmg = Math.floor(oppDmg * ((Math.random() * 1.5) + 1));
-                fightText += "His opponent damaged him: -" + rndOppDmg
-                        + " health point. Remained " + character.getHealthPoint();
-                fightText += (rndOppDmg > oppDmg * 1.4) ? "\tCRITICAL HIT\n" : "\n";
-                fightText += "Rhonin attacked: " + rndPlayerDmg + " damages. "
-                        + actEnemy.getHealthPoint() + " health remained.";
-                fightText += (rndPlayerDmg > playerDmg * 1.4) ? "\tCRITICAL HIT\n" : "\n";
-            }
-            //player died
-            if (characterHealth <= 0) {
-                character = new Player();
-                //player survived
-            } else {
-                xpGain = PlayerUtils.npcXpGain(actEnemy.getLevel(), character.getLevel());
-                character.setHealthPoint(characterHealth);
-            }
+        String name = principal.getName();
+        Player player = playerRepository.findByUsername( name );
+        if( player == null ) {
+            throw new NoSuchFieldException();
         }
-        return mapper.writeValueAsString(new ResponseClass(character, xpGain, fightText));
+        player.setPassword("");
+        return player;
     }
 
-    class ResponseClass {
-        public Player character;
-        public int xpGain;
-        public String fightText;
-
-        public ResponseClass(){}
-
-        public ResponseClass(Player newPlayer, int xpGain, String fightText) {
-            this.character = newPlayer;
-            this.xpGain = xpGain;
-            this.fightText = fightText;
+    @RequestMapping(value="/save", method = RequestMethod.POST)
+    public Player savePlayer( Player player, Principal principal ) throws NoSuchFieldException {
+        if( principal == null ) {
+            throw new NoSuchFieldException();
         }
+        String name = principal.getName();
+        player.setUsername(name);
+        playerRepository.save(player);
+        return player;
+    }
 
+    @RequestMapping( value = "/register", method = RequestMethod.POST )
+    public ResponseEntity<?> register(@RequestBody Player player ) {
+        String userName = player.getUsername();
+        Player oldPlayer = playerRepository.findByUsername( userName );
+        if( oldPlayer == null ) {
+            String encodedPassword = encoder.encode( player.getPassword() );
+            Player newPlayer = new Player();
+            newPlayer.setUsername( userName );
+            newPlayer.setPassword( encodedPassword );
+            playerRepository.save( newPlayer );
+            return new ResponseEntity<Object>( HttpStatus.CREATED );
+        } else {
+            return new ResponseEntity<Object>(HttpStatus.METHOD_NOT_ALLOWED);
+        }
+    }
 
+    @RequestMapping(value = "/fight", method = RequestMethod.GET)
+    public String story(@RequestParam(value = "enemy")String enemy,
+                        Principal principal ) throws IOException, NoSuchFieldException {
+        ObjectMapper mapper = new ObjectMapper();
+        if( principal == null ) {
+            throw new NoSuchFieldException();
+        }
+        String name = principal.getName();
+        Player character = playerRepository.findByUsername( name );
+        if( character == null ) {
+            throw new NoSuchFieldException();
+        }
+        character.setPassword( "" );
+        ResponseClass response = PlayerUtils.fight(enemy, character);
+        return mapper.writeValueAsString(response);
     }
 }

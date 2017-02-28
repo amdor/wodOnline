@@ -1,4 +1,4 @@
-package com.onlab.security;
+package com.onlab.utils;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
