@@ -6,8 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection="npc")
 public class Npc extends AbstractCharacter {
-    @Id
-    String id;
 
     @Field("Name")
     String name;
@@ -17,14 +15,6 @@ public class Npc extends AbstractCharacter {
     public Npc(int attackPower, int defensePower, int healthPoint, int level, String name) {
         super(attackPower, defensePower, healthPoint, level);
         this.name = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {

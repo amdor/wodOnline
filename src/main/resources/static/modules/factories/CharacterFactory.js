@@ -60,6 +60,18 @@ module.factory('characterUtils', ['$http', 'notifications', function( $http, not
         });
     }
 
+    function newGame( success ) {
+        $http.get("/newGame").then(
+        function(response) {
+           Character( response.data );
+           notifications.showInfo("New game loaded");
+           success();
+        },
+        function( jqXHR, textStatus, errorThrown){
+           notifications.showAlert("Request resulted in error");
+        });
+    }
+
     /**
      * Returns xp amount needed for the next level
      */
@@ -78,6 +90,7 @@ module.factory('characterUtils', ['$http', 'notifications', function( $http, not
         "character" : function(){return character},
         "saveCharacter" : saveCharacter,
         "loadCharacter" : loadCharacter,
+        "newGame" : newGame,
         "nextLevelXP" : nextLevelXP
     };
 }]);

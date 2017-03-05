@@ -10,11 +10,11 @@ module.controller('NpcController', ['$scope', 'notifications', '$http',
      * Gets npcs from the database
      */
     $scope.$on('$viewContentLoaded', function(event){
-        $http.get("/npcs", fillTable)
+        $http.get("/npcs")
         .then(
-        function(){
-            $scope.npcs = data;
-            },
+        function(response){
+            $scope.npcs = response.data;
+        },
         function(){
            showAlert("Request resulted in error");
         });

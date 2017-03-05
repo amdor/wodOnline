@@ -1,6 +1,11 @@
 package com.onlab.entities;
 
+import org.springframework.data.annotation.Id;
+
 public abstract class AbstractCharacter {
+
+    @Id
+    String id;
 
     int attackPower;
 
@@ -17,6 +22,15 @@ public abstract class AbstractCharacter {
         this.defensePower = defensePower;
         this.healthPoint = healthPoint;
         this.level = level;
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public int getAttackPower() {

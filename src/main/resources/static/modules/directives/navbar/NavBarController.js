@@ -17,6 +17,7 @@ module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'no
     }
 
 //    shows modal and loads episode if there
+//TODO
     $scope.loadGameClicked = function() {
         var body = "By clicking on Load, the last saved state will be loaded, and current unsaved progress will be lost!";
         showConfirm("Load game", body, "Load", function() {
@@ -25,17 +26,14 @@ module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'no
                 showAlert("There is no saved game state yet.");
                 return;
             }
-            sessionStorage.clear();
-            sessionStorage.setItem("episode", episode);
             character = characterUtils.loadCharacter(true);
-            characterUtils.saveCharacter(); //to sessionstorage by default
+            characterUtils.saveCharacter();
             $state.go('story', {episode: episode})
         });
     }
-
+//TODO
     $scope.saveGameClicked = function(){
         characterUtils.saveCharacter();
-        localStorage.setItem("episode", sessionStorage.getItem("episode"))
         showInfo("Saved");
     }
 
@@ -66,9 +64,9 @@ module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'no
     }
 
     function newGameConfirmed() {
-       sessionStorage.clear();
-       localStorage.clear();
-       $state.go('story.newGame');
+        characterUtils.newGame( function() {
+            $state.go('story.newGame');
+        });
     }
 
 }]);

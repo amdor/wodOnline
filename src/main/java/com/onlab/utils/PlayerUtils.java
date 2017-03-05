@@ -32,19 +32,18 @@ public class PlayerUtils {
 
     public static String afterAnsweredModifications(Answer.ActualAnswer answer, Player player) {
         int xpGain = 0;
-        String returnText = "";
-        answer.storyText += "\n";
+        String returnText = answer.storyText;
+        String playerId = player.getId();
+        returnText += "\n";
         int episode = (answer.next == 0) ? player.getEpisode() + 1 : answer.next;
         player.setEpisode(episode);
 
         if ( answer.outcome.equals("fail") ) {
             xpGain = fail(player.getLevel());
-            returnText = answer.storyText;
             returnText += "Hasn't saved the world today. \n Gained " +
                     xpGain + " experience";
         } else if ( answer.outcome.equals("reward") ) {
             xpGain = reward(player.getLevel());
-            returnText = answer.storyText;
             returnText += "The well-deserved reward is " +
                     xpGain + " experience";
         } else {
@@ -56,6 +55,7 @@ public class PlayerUtils {
         player.setHealthPoint( (player.getHealthPoint() < player.getMaxHP() - 20) ?
                 player.getHealthPoint() + 20 : player.getMaxHP() );
         player = finalizeAction(xpGain, player);
+        player.setId(playerId);
         playerRepository.save(player);
         return returnText;
 }
@@ -128,15 +128,15 @@ public class PlayerUtils {
                 rndPlayerDmg = Math.floor(playerDmg * ((Math.random() * 1.5) + 1));
                 rndOppDmg = Math.floor(oppDmg * ((Math.random() * 1.5) + 1));
                 fightText += "His opponent damaged him: -" + rndOppDmg
-                        + " health point. Remained " + player.getHealthPoint();
+                        + " health point. Remained " + characterHealth;
                 fightText += (rndOppDmg > oppDmg * 1.4) ? "\tCRITICAL HIT\n" : "\n";
                 fightText += "Rhonin attacked: " + rndPlayerDmg + " damages. "
-                        + actEnemy.getHealthPoint() + " health remained.";
+                        + enemyHealth + " health remained.";
                 fightText += (rndPlayerDmg > playerDmg * 1.4) ? "\tCRITICAL HIT\n" : "\n";
             }
             //player died
             if (characterHealth <= 0) {
-                player = new Player();
+                player = newGamePlayer(player);
                 //player survived
             } else {
                 xpGain = npcXpGain(actEnemy.getLevel(), player.getLevel());
@@ -144,5 +144,17 @@ public class PlayerUtils {
             }
         }
         return new ResponseClass(player, xpGain, fightText);
+    }
+
+    public static Player newGamePlayer(Player oldPlayer) {
+        Player newPlayer = new Player();
+        oldPlayer.setMaxHP(newPlayer.getMaxHP());
+        oldPlayer.setHealthPoint(newPlayer.getHealthPoint());
+        oldPlayer.setExperience(newPlayer.getExperience());
+        oldPlayer.setEpisode(newPlayer.getEpisode());
+        oldPlayer.setAttackPower(newPlayer.getAttackPower());
+        oldPlayer.setDefensePower(newPlayer.getDefensePower());
+        oldPlayer.setLevel(newPlayer.getLevel());
+        return oldPlayer;
     }
 }

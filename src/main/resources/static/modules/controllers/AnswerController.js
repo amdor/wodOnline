@@ -39,7 +39,7 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
             if(loadedCharacter.experience == 0) {
                 $state.go("story.newGame");
                 //showing a die modal
-                var body = "<pre>" + fightText + "</pre>" + "<p><b>Rhonin died, " +
+                var body = "<pre>" + $scope.answerText + "</pre>" + "<p><b>Rhonin died, " +
                                          "the game is lost. Upon continuing, the first episode will appear</p><b>";
                 notifications.showConfirm("Game Over", body, "Confirm", function() {
                     //noop

@@ -39,9 +39,13 @@ public class AnswerController {
 
         switch (answer) {
             case "A" : actualAnswer = answers.getAnswerA();
+                break;
             case "B" : actualAnswer = answers.getAnswerB();
+                break;
             case "C" : actualAnswer = answers.getAnswerC();
+                break;
             case "D" : actualAnswer = answers.getAnswerD();
+                break;
         }
 
         return PlayerUtils.afterAnsweredModifications(actualAnswer, player);
