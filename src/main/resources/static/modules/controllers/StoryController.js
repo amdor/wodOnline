@@ -6,7 +6,7 @@ module.controller('StoryController', ['$scope', '$state', 'characterUtils', 'not
     var showAlert = notifications.showAlert;
 
     $scope.character;
-    characterUtils.loadCharacter( function( loadedCharacter ) {
+    characterUtils.getPlayer( function( loadedCharacter ) {
         $scope.character = loadedCharacter;
     });
     $scope.chapterTitle = "";

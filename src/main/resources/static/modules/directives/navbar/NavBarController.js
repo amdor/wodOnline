@@ -17,21 +17,24 @@ module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'no
     }
 
 //    shows modal and loads episode if there
-//TODO
     $scope.loadGameClicked = function() {
         var body = "By clicking on Load, the last saved state will be loaded, and current unsaved progress will be lost!";
-        showConfirm("Load game", body, "Load", function() {
-            var episode = Number(localStorage.episode);
-            if(Number.isNaN(episode)) { //new game with no saves yet
-                showAlert("There is no saved game state yet.");
-                return;
-            }
-            character = characterUtils.loadCharacter(true);
-            characterUtils.saveCharacter();
-            $state.go('story', {episode: episode})
-        });
+        showConfirm("Load game", body, "Load", function(){
+            characterUtils.loadCharacter(
+                function(character){
+                    var episode = Number(character.episode);
+                    if(Number.isNaN(episode) || episode == null ) { //new game with no saves yet
+                        showAlert("There is no saved game state yet.");
+                        return;
+                    }
+                    $state.go('story', {episode: episode})
+                    $scope.$apply();
+                }
+            )
+        }
+        );
     }
-//TODO
+
     $scope.saveGameClicked = function(){
         characterUtils.saveCharacter();
         showInfo("Saved");

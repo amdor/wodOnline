@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onlab.entities.Npc;
 import com.onlab.entities.Player;
 import com.onlab.entities.ResponseClass;
+import com.onlab.entities.SavedPlayer;
 import com.onlab.repositories.PlayerRepository;
+import com.onlab.repositories.SavedPlayerRepository;
 import com.onlab.utils.PlayerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,9 @@ public class PlayerController {
 
     @Autowired
     private PlayerRepository playerRepository;
+
+    @Autowired
+    private SavedPlayerRepository savedPlayerRepository;
 
     @Autowired
     BCryptPasswordEncoder encoder;
@@ -38,15 +43,33 @@ public class PlayerController {
         return player;
     }
 
-    @RequestMapping(value="/save", method = RequestMethod.POST)
-    public Player savePlayer( Player player, Principal principal ) throws NoSuchFieldException {
+    @RequestMapping(value="/load", method = RequestMethod.GET)
+    public Player loadPlayer( Principal principal ) throws NoSuchFieldException {
         if( principal == null ) {
             throw new NoSuchFieldException();
         }
         String name = principal.getName();
-        player.setUsername(name);
+        Player player = savedPlayerRepository.findByUsername( name );
+        if( player == null ) {
+            throw new NoSuchFieldException();
+        }
+        player.setId(playerRepository.findByUsername( name ).getId());
         playerRepository.save(player);
+        player.setPassword("");
         return player;
+    }
+
+    @RequestMapping(value="/save", method = RequestMethod.POST)
+    public void savePlayer( Principal principal ) throws NoSuchFieldException {
+        if( principal == null ) {
+            throw new NoSuchFieldException();
+        }
+        String name = principal.getName();
+        Player player = playerRepository.findByUsername( name );
+        if( player == null ) {
+            throw new NoSuchFieldException();
+        }
+        savedPlayerRepository.save(new SavedPlayer(player));
     }
 
     @RequestMapping( value = "/register", method = RequestMethod.POST )

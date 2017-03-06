@@ -4,7 +4,7 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
                     function ($scope, $state, $stateParams, characterUtils, notifications, $http){
 
     var episode = 0;
-    characterUtils.loadCharacter( function( loadedCharacter ) {
+    characterUtils.getPlayer( function( loadedCharacter ) {
         episode = loadedCharacter.episode;
         getAnswer();
     });
@@ -35,7 +35,7 @@ module.controller('AnswerController', ['$scope', '$state', '$stateParams', 'char
 
     function handleAnswerResponse( response ) {
         $scope.answerText = response.data;
-        characterUtils.loadCharacter( function(loadedCharacter) {
+        characterUtils.getPlayer( function(loadedCharacter) {
             if(loadedCharacter.experience == 0) {
                 $state.go("story.newGame");
                 //showing a die modal

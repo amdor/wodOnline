@@ -35,11 +35,8 @@ module.factory('characterUtils', ['$http', 'notifications', function( $http, not
      *UTILITIES
     */
 
-    function saveCharacter(object) {
-        if(object == null){
-            object = character;
-        }
-        $http.post("/save", object).then(
+    function saveCharacter() {
+        $http.post("/save").then(
         function(response) {
             notifications.showInfo("Character saved");
         },
@@ -49,14 +46,25 @@ module.factory('characterUtils', ['$http', 'notifications', function( $http, not
         );
     }
 
-    function loadCharacter( success ) {
-        $http.get("/player").then(
+    function loadCharacter(success) {
+        $http.get("/load").then(
         function(response) {
             Character( response.data );
             success( character );
         },
         function( jqXHR, textStatus, errorThrown){
            notifications.showAlert("Request resulted in error");
+        });
+    }
+
+    function getPlayer(success) {
+        $http.get("/player").then(
+        function(response) {
+            Character( response.data );
+            success( character );
+        },
+        function( jqXHR, textStatus, errorThrown){
+            notifications.showAlert("Request resulted in error");
         });
     }
 
@@ -90,6 +98,7 @@ module.factory('characterUtils', ['$http', 'notifications', function( $http, not
         "character" : function(){return character},
         "saveCharacter" : saveCharacter,
         "loadCharacter" : loadCharacter,
+        "getPlayer" : getPlayer,
         "newGame" : newGame,
         "nextLevelXP" : nextLevelXP
     };

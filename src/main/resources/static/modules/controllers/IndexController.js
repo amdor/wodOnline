@@ -9,7 +9,7 @@ module.controller("IndexController", ['$scope', '$rootScope', '$state', 'charact
      * Initialize page's dynamic contents
      */
      if( $rootScope.loggedIn ) {
-        characterUtils.loadCharacter( function(character){
+        characterUtils.getPlayer( function(character){
             if (character.episode > 0) {
                 $state.go('story');
             } else {
