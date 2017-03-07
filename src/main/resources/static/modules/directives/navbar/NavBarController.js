@@ -27,8 +27,7 @@ module.controller("NavBarController", ['$scope', '$state', 'characterUtils', 'no
                         showAlert("There is no saved game state yet.");
                         return;
                     }
-                    $state.go('story', {episode: episode})
-                    $scope.$apply();
+                    $state.reload();
                 }
             )
         }
