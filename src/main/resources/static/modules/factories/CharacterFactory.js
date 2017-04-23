@@ -83,6 +83,7 @@ module.factory('characterUtils', ['$http', 'notifications', function( $http, not
     /**
      * Returns xp amount needed for the next level
      */
+     //TODO: make endpoint for this method
     function nextLevelXP() {
         if( character.level < 11 ) {
             return ( 40 * character.level * character.level ) + ( 360 * character.level );

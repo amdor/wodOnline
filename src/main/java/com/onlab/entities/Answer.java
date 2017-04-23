@@ -24,6 +24,8 @@ public class Answer {
     @Field("D")
     private ActualAnswer answerD;
 
+    public Answer(){}
+
     public Answer(int episode, ActualAnswer answerA, ActualAnswer answerB, ActualAnswer answerC, ActualAnswer answerD) {
         this.episode = episode;
         this.answerA = answerA;
@@ -84,6 +86,10 @@ public class Answer {
                 '}';
     }
 
+    public ActualAnswer buildActualAnswer() {
+        return new ActualAnswer();
+    }
+
     public class ActualAnswer {
         public String outcome;
         public String storyText;
@@ -91,5 +97,6 @@ public class Answer {
         public int time;
         public int stayInCity;
 
+        public ActualAnswer() {}
     }
 }

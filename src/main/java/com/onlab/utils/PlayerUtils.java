@@ -111,6 +111,7 @@ public class PlayerUtils {
         //enemy is too strong
         if(actEnemy.getDefensePower() >= player.getAttackPower()){
             characterHealth -= player.getHealthPoint()/2;
+            xpGain = fail(actEnemy.getLevel());
             //opposit
         } else if(player.getDefensePower() >= actEnemy.getAttackPower()){
             xpGain = npcXpGain(actEnemy.getLevel(), player.getLevel());
@@ -140,9 +141,9 @@ public class PlayerUtils {
                 //player survived
             } else {
                 xpGain = npcXpGain(actEnemy.getLevel(), player.getLevel());
-                player.setHealthPoint(characterHealth);
             }
         }
+        player.setHealthPoint(characterHealth);
         return new ResponseClass(player, xpGain, fightText);
     }
 
